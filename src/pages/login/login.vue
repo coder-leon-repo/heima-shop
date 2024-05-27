@@ -6,6 +6,6 @@
   <view class="login">login</view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 //
 </style>

@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
+import { http } from '@/service/request';
 import { useMemberStore } from '@/stores'
-import { http } from '@/utils/http'
 
 const memberStore = useMemberStore()
 
@@ -36,6 +36,6 @@ const fetchData = async () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 //
 </style>
