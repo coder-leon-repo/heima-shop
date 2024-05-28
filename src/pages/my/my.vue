@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { http } from '@/service/request';
-import { useMemberStore } from '@/stores'
+import { http } from '@/service/request'
+import { useMemberStore } from '@/store'
 
 const memberStore = useMemberStore()
 

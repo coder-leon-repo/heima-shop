@@ -1,17 +1,20 @@
-import { useMemberStore } from '@/stores'
-
-// 基础地址
-const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+import {
+  BASE_URL,
+  DEFAULT_REQUEST_ERROR_MSG,
+  NETWORK_ERROR_MSG,
+  REQUEST_TIMEOUT
+} from '@/config/service'
+import { useMemberStore } from '@/store'
 
 // 拦截器配置
 const httpInterceptor = {
   invoke(options: UniApp.RequestOptions) {
     // 拼接baseURL地址
     if (!options.url.includes('http')) {
-      options.url = baseURL + options.url
+      options.url = BASE_URL + options.url
     }
     // 设置超时时间
-    options.timeout = 10000
+    options.timeout = REQUEST_TIMEOUT
     // 添加小程序请求头标识
     options.header = {
       ...options,
@@ -58,7 +61,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
           // 其他错误 -> 后端返回的错误
           uni.showToast({
             icon: 'none',
-            title: (res.data as Data<T>).msg || '网络请求失败'
+            title: (res.data as Data<T>).msg || DEFAULT_REQUEST_ERROR_MSG
           })
           reject(res)
         }
@@ -68,7 +71,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
         // 网络故障
         uni.showToast({
           icon: 'none',
-          title: '网络错误!'
+          title: NETWORK_ERROR_MSG
         })
         reject(err)
       }

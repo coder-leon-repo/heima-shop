@@ -6,13 +6,20 @@
       :circular="true"
       @change="onSlideChange"
     >
-      <swiper-item v-for="item in swiperData" :key="item.id">
+      <swiper-item
+        v-for="item in swiperData"
+        :key="item.id"
+      >
         <navigator
           url="/pages/index/index"
           hover-class="none"
           class="navigator"
         >
-          <image mode="aspectFill" class="image" :src="item.imgUrl"></image>
+          <image
+            mode="aspectFill"
+            class="image"
+            :src="item.imgUrl"
+          ></image>
         </navigator>
       </swiper-item>
     </swiper>
