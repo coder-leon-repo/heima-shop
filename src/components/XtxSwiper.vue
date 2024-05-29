@@ -49,6 +49,8 @@ const active = ref<number>(0)
 const onSlideChange: UniHelper.SwiperOnChange = (e) => {
   active.value = e.detail.current
 }
+
+
 </script>
 
 <style lang="scss" scoped>
