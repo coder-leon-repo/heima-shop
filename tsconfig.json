@@ -1,7 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
+    "target": "ES2015",
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
@@ -21,8 +21,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
-    "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "exclude": ["dist"]
+  "exclude": ["node_modules", "dist"]
 }

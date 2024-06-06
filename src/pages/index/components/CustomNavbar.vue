@@ -1,8 +1,14 @@
 <template>
-  <view class="navbar" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
+  <view
+    class="navbar"
+    :style="{ paddingTop: safeAreaInsets?.top + 'px' }"
+  >
     <!-- logo文字 -->
     <view class="logo">
-      <image class="logo-image" src="@/static/images/logo.png"></image>
+      <image
+        class="logo-image"
+        src="@/static/images/logo.png"
+      ></image>
       <text class="logo-text">新鲜 · 亲民 · 快捷</text>
     </view>
     <!-- 搜索条 -->
@@ -26,16 +32,19 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
   display: flex;
   flex-direction: column;
   padding-top: 20px;
+
   .logo {
     display: flex;
     align-items: center;
     height: 64rpx;
     padding-left: 30rpx;
     padding-top: 20rpx;
+
     .logo-image {
       width: 166rpx;
       height: 39rpx;
     }
+
     .logo-text {
       flex: 1;
       line-height: 28rpx;
@@ -46,6 +55,7 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
       font-size: 26rpx;
     }
   }
+
   .search {
     display: flex;
     align-items: center;
@@ -58,11 +68,13 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
     border-radius: 32rpx;
     background-color: rgba(255, 255, 255, 0.5);
   }
+
   .icon-search {
     &::before {
       margin-right: 10rpx;
     }
   }
+
   .icon-scan {
     font-size: 30rpx;
     padding: 15rpx;
