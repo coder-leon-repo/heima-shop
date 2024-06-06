@@ -1,6 +1,6 @@
 {
   "name": "uni-app-xiaotuxian",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": {
     "name": "Leon"
   },
@@ -42,9 +42,15 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.{js,ts,vue}": [
-      "eslint --fix"
+      "eslint --fix",
+      "git add"
     ]
   },
   "dependencies": {

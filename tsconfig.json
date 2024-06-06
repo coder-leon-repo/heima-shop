@@ -1,7 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
@@ -21,7 +20,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
-    "src/**/*.tsx",
     "src/**/*.vue"
   ]
 }

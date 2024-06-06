@@ -1,5 +1,5 @@
 <template>
-  <view class="carousel-container">
+  <view class="swiper">
     <swiper
       :interval="3000"
       :autoplay="false"
@@ -7,13 +7,13 @@
       @change="onSlideChange"
     >
       <swiper-item
-        v-for="item in swiperData"
+        v-for="item in carouselData"
         :key="item.id"
       >
         <navigator
           url="/pages/index/index"
           hover-class="none"
-          class="navigator"
+          class="swiper-item"
         >
           <image
             mode="aspectFill"
@@ -24,11 +24,11 @@
       </swiper-item>
     </swiper>
     <!-- 自定义指示点 -->
-    <view class="indicator-container">
+    <view class="indicator">
       <text
         class="dot"
-        v-for="(item, index) in swiperData.length"
-        :key="index"
+        v-for="(item, index) in carouselData.length"
+        :key="item"
         :class="{ active: active === index }"
       >
       </text>
@@ -41,11 +41,13 @@ import type { BannerItem } from '@/types/home'
 import { ref } from 'vue'
 
 defineProps<{
-  swiperData: BannerItem[]
+  carouselData: BannerItem[]
 }>()
 
-const active = ref<number>(0)
+// 当前轮播图索引
+const active = ref(0)
 
+// 监听轮播图切换
 const onSlideChange: UniHelper.SwiperOnChange = (e) => {
   active.value = e.detail.current
 }
@@ -54,22 +56,25 @@ const onSlideChange: UniHelper.SwiperOnChange = (e) => {
 </script>
 
 <style lang="scss" scoped>
-.carousel-container {
+.swiper {
   position: relative;
   height: 280rpx;
   overflow: hidden;
-  .navigator,
+
+  .swiper-item,
   .image {
     width: 100%;
     height: 100%;
   }
-  .indicator-container {
+
+  .indicator {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 16rpx;
     display: flex;
     justify-content: center;
+
     .dot {
       width: 30rpx;
       height: 8rpx;
@@ -77,6 +82,7 @@ const onSlideChange: UniHelper.SwiperOnChange = (e) => {
       border-radius: 6rpx;
       background-color: rgba(255, 255, 2555, 0.5);
     }
+
     .active {
       background-color: #fff;
     }
