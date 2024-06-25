@@ -1,14 +1,18 @@
 <template>
-  <view class="index">
-    <!-- 自定义导航条 -->
-    <CustomNavbar></CustomNavbar>
-    <!-- 通用轮播图 -->
+  <!-- 自定义导航条 -->
+  <CustomNavbar></CustomNavbar>
+  <!-- 通用轮播图 -->
+  <scroll-view scroll-y @scrolltolower="onScrollToLower">
     <XtxSwiper :carousel-data="homeBannerData"></XtxSwiper>
+    <!-- 分类面板 -->
     <CategoryPanel
       :category-data="homeCategoryData"
     ></CategoryPanel>
+    <!-- 热门推荐 -->
     <HotPanel :hot-data="homeHotData"></HotPanel>
-  </view>
+    <!-- 猜你喜欢 -->
+    <XtxGuess ref="guessLikeRef"></XtxGuess>
+  </scroll-view>
 </template>
 
 <script setup lang="ts">
@@ -27,6 +31,7 @@ import type {
 } from '@/types/home'
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import type { XtxGuessInstance } from '@/types/component'
 
 // 获取轮播图数据
 const homeBannerData = ref<BannerItem[]>([])
@@ -52,6 +57,13 @@ const fetchHomeHot = async () => {
   homeHotData.value = result
 }
 
+const guessLikeRef = ref<XtxGuessInstance>()
+
+// 监听滚动条到达底部
+const onScrollToLower = () => {
+  guessLikeRef.value?.fetchGuessLikeData()
+}
+
 onLoad(() => {
   fetchHomeBanner()
   fetchHomeCategory()
@@ -59,4 +71,10 @@ onLoad(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+</style>
