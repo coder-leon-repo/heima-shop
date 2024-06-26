@@ -1,5 +1,5 @@
 <template>
-  <view class="swiper">
+  <view class="swiper" style="height: 280rpx">
     <swiper
       :interval="3000"
       :autoplay="false"
@@ -56,7 +56,6 @@ const onSlideChange: UniHelper.SwiperOnChange = (e) => {
 <style lang="scss" scoped>
 .swiper {
   position: relative;
-  height: 280rpx;
   overflow: hidden;
 
   .swiper-item,

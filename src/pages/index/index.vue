@@ -1,7 +1,6 @@
 <template>
   <!-- 自定义导航条 -->
   <CustomNavbar></CustomNavbar>
-  <!-- 通用轮播图 -->
   <scroll-view
     scroll-y
     @scrolltolower="onScrollToLower"
@@ -9,19 +8,27 @@
     @refresherrefresh="onRefresh"
     :refresher-triggered="isTriggered"
   >
-    <XtxSwiper :carousel-data="homeBannerData"></XtxSwiper>
-    <!-- 分类面板 -->
-    <CategoryPanel
-      :category-data="homeCategoryData"
-    ></CategoryPanel>
-    <!-- 热门推荐 -->
-    <HotPanel :hot-data="homeHotData"></HotPanel>
-    <!-- 猜你喜欢 -->
-    <XtxGuess ref="guessLikeRef"></XtxGuess>
+    <!-- 骨架屏 -->
+    <IndexSkeleton v-if="isShowSkeleton"></IndexSkeleton>
+    <template v-else>
+      <!-- 通用轮播图 -->
+      <XtxSwiper
+        :carousel-data="homeBannerData"
+      ></XtxSwiper>
+      <!-- 分类面板 -->
+      <CategoryPanel
+        :category-data="homeCategoryData"
+      ></CategoryPanel>
+      <!-- 热门推荐 -->
+      <HotPanel :hot-data="homeHotData"></HotPanel>
+      <!-- 猜你喜欢 -->
+      <XtxGuess ref="guessLikeRef"></XtxGuess>
+    </template>
   </scroll-view>
 </template>
 
 <script setup lang="ts">
+import IndexSkeleton from './components/IndexSkeleton.vue'
 import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
@@ -70,27 +77,38 @@ const onScrollToLower = () => {
   guessLikeRef.value?.fetchGuessLikeData()
 }
 
-// 自定义下拉刷新 > 重新加载数据
+// 自定义下拉刷新状态
 const isTriggered = ref(false)
 
+// 监听自定义下拉刷新
 const onRefresh = async () => {
   isTriggered.value = true
 
   guessLikeRef.value?.resetGuessListData()
-  
+
   await Promise.all([
     fetchHomeBannerData(),
     fetchHomeCategoryData(),
-    fetchHomeHotData(),
+    fetchHomeHotData()
   ])
 
   isTriggered.value = false
 }
 
-onLoad(() => {
-  fetchHomeBannerData()
-  fetchHomeCategoryData()
-  fetchHomeHotData()
+// 是否显示骨架屏
+const isShowSkeleton = ref(false)
+
+// 页面加载
+onLoad(async () => {
+  isShowSkeleton.value = true
+
+  await Promise.all([
+    fetchHomeBannerData(),
+    fetchHomeCategoryData(),
+    fetchHomeHotData()
+  ])
+
+  isShowSkeleton.value = false
 })
 </script>
 
