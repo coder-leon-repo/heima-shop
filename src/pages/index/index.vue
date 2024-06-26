@@ -2,7 +2,13 @@
   <!-- 自定义导航条 -->
   <CustomNavbar></CustomNavbar>
   <!-- 通用轮播图 -->
-  <scroll-view scroll-y @scrolltolower="onScrollToLower">
+  <scroll-view
+    scroll-y
+    @scrolltolower="onScrollToLower"
+    refresher-enabled
+    @refresherrefresh="onRefresh"
+    :refresher-triggered="isTriggered"
+  >
     <XtxSwiper :carousel-data="homeBannerData"></XtxSwiper>
     <!-- 分类面板 -->
     <CategoryPanel
@@ -20,9 +26,9 @@ import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
 import {
-  getHomeBanner,
-  getHomeCategory,
-  getHomeHotItem
+  getHomeBannerData,
+  getHomeCategoryData,
+  getHomeHotItemData
 } from '@/service'
 import type {
   BannerItem,
@@ -36,38 +42,55 @@ import type { XtxGuessInstance } from '@/types/component'
 // 获取轮播图数据
 const homeBannerData = ref<BannerItem[]>([])
 
-const fetchHomeBanner = async () => {
-  const { result } = await getHomeBanner()
+const fetchHomeBannerData = async () => {
+  const { result } = await getHomeBannerData()
   homeBannerData.value = result
 }
 
 // 获取分类数据
 const homeCategoryData = ref<CategoryItem[]>([])
 
-const fetchHomeCategory = async () => {
-  const { result } = await getHomeCategory()
+const fetchHomeCategoryData = async () => {
+  const { result } = await getHomeCategoryData()
   homeCategoryData.value = result
 }
 
 // 获取热门推荐数据
 const homeHotData = ref<HotItem[]>([])
 
-const fetchHomeHot = async () => {
-  const { result } = await getHomeHotItem()
+const fetchHomeHotData = async () => {
+  const { result } = await getHomeHotItemData()
   homeHotData.value = result
 }
 
 const guessLikeRef = ref<XtxGuessInstance>()
 
-// 监听滚动条到达底部
+// 监听滚动条到达底部 >下拉加载更多
 const onScrollToLower = () => {
   guessLikeRef.value?.fetchGuessLikeData()
 }
 
+// 自定义下拉刷新 > 重新加载数据
+const isTriggered = ref(false)
+
+const onRefresh = async () => {
+  isTriggered.value = true
+
+  guessLikeRef.value?.resetGuessListData()
+  
+  await Promise.all([
+    fetchHomeBannerData(),
+    fetchHomeCategoryData(),
+    fetchHomeHotData(),
+  ])
+
+  isTriggered.value = false
+}
+
 onLoad(() => {
-  fetchHomeBanner()
-  fetchHomeCategory()
-  fetchHomeHot()
+  fetchHomeBannerData()
+  fetchHomeCategoryData()
+  fetchHomeHotData()
 })
 </script>
 

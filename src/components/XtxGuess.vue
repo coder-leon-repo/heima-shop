@@ -26,12 +26,14 @@
     </view>
   </view>
   <view class="loading-text">
-    {{ isLoadFinish ? '没有更多数据～' : '加载更多...' }}
+    {{
+      isLoadingFinished ? '没有更多数据～' : '加载更多...'
+    }}
   </view>
 </template>
 
 <script setup lang="ts">
-import { getGuessLike } from '@/service'
+import { getGuessLikeData } from '@/service'
 import type { PageArgs } from '@/types/global'
 import type { GuessItem } from '@/types/home'
 import { onMounted, reactive, ref } from 'vue'
@@ -39,27 +41,34 @@ import { onMounted, reactive, ref } from 'vue'
 const guessListData = ref<GuessItem[]>([])
 
 // 标记下拉数据是否请求完成
-const isLoadFinish = ref(false)
+const isLoadingFinished = ref(false)
 
-const pageParams = reactive<Required<PageArgs>>({
-  page: 32,
+const pagination = reactive<Required<PageArgs>>({
+  page: 1,
   pageSize: 10
 })
 
 // 请求分页数据
 const fetchGuessLikeData = async () => {
-  if (isLoadFinish.value === true) return
+  if (isLoadingFinished.value === true) return
 
-  const res = await getGuessLike(pageParams)
+  const res = await getGuessLikeData(pagination)
   const pages = res.result.pages
-
   guessListData.value.push(...res.result.items)
 
-  if (pageParams.page < pages) {
-    pageParams.page++
+  // 分页条件
+  if (pagination.page < pages) {
+    pagination.page++
   } else {
-    isLoadFinish.value = true
+    isLoadingFinished.value = true
   }
+}
+
+// 重置数据
+const resetGuessListData = () => {
+  guessListData.value = []
+  pagination.page = 1
+  isLoadingFinished.value = false
 }
 
 onMounted(() => {
@@ -67,7 +76,8 @@ onMounted(() => {
 })
 
 defineExpose({
-  fetchGuessLikeData
+  fetchGuessLikeData,
+  resetGuessListData
 })
 </script>
 

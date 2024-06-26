@@ -8,7 +8,7 @@ import type {
 } from '@/types/home'
 
 // 首页-轮播图
-export const getHomeBanner = (distributionSite = 1) => {
+export const getHomeBannerData = (distributionSite = 1) => {
   return http<BannerItem[]>({
     url: '/home/banner',
     method: 'GET',
@@ -19,7 +19,7 @@ export const getHomeBanner = (distributionSite = 1) => {
 }
 
 // 首页-分类信息
-export const getHomeCategory = () => {
+export const getHomeCategoryData = () => {
   return http<CategoryItem[]>({
     url: '/home/category/mutli',
     method: 'GET'
@@ -27,7 +27,7 @@ export const getHomeCategory = () => {
 }
 
 // 首页-热门推荐
-export const getHomeHotItem = () => {
+export const getHomeHotItemData = () => {
   return http<HotItem[]>({
     url: '/home/hot/mutli',
     method: 'GET'
@@ -35,7 +35,7 @@ export const getHomeHotItem = () => {
 }
 
 // 猜你喜欢
-export const getGuessLike = (data?: PageArgs) => {
+export const getGuessLikeData = (data?: PageArgs) => {
   return http<PageResult<GuessItem>>({
     url: '/home/goods/guessLike',
     method: 'GET',
