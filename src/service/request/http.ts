@@ -13,6 +13,7 @@ const httpInterceptor = {
     if (!options.url.includes('http')) {
       options.url = BASE_URL + options.url
     }
+
     // 设置超时时间
     options.timeout = REQUEST_TIMEOUT
     // 添加小程序请求头标识
@@ -20,6 +21,7 @@ const httpInterceptor = {
       ...options,
       'source-client': 'miniapp'
     }
+
     // 添加 token 标识
     const memberStore = useMemberStore()
     const token = memberStore.profile?.token
