@@ -11,7 +11,7 @@
       </view>
       <navigator
         class="goods"
-        url="/pages/index/index"
+        :url="`/pages/recommend/recommend?type=${item.type}`"
         hover-class="none"
       >
         <image

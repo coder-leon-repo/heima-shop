@@ -15,7 +15,7 @@
           :src="item.picture"
           mode="aspectFill"
         />
-        <view class="name">
+        <view class="name ellipsis">
           {{ item.name }}
         </view>
         <view class="price">
@@ -26,22 +26,20 @@
     </view>
   </view>
   <view class="loading-text">
-    {{
-      isLoadingFinished ? '没有更多数据～' : '加载更多...'
-    }}
+    {{ isFinish ? '没有更多数据～' : '加载更多...' }}
   </view>
 </template>
 
 <script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue'
 import { getGuessLikeData } from '@/service'
 import type { PageArgs } from '@/types/global'
 import type { GuessItem } from '@/types/home'
-import { onMounted, reactive, ref } from 'vue'
 
 const guessListData = ref<GuessItem[]>([])
 
-// 标记下拉数据是否请求完成
-const isLoadingFinished = ref(false)
+// 标记分页数据是否全部加载完成
+const isFinish = ref(false)
 
 const pagination = reactive<Required<PageArgs>>({
   page: 1,
@@ -50,7 +48,7 @@ const pagination = reactive<Required<PageArgs>>({
 
 // 请求分页数据
 const fetchGuessLikeData = async () => {
-  if (isLoadingFinished.value === true) return
+  if (isFinish.value === true) return
 
   const res = await getGuessLikeData(pagination)
   const pages = res.result.pages
@@ -60,7 +58,7 @@ const fetchGuessLikeData = async () => {
   if (pagination.page < pages) {
     pagination.page++
   } else {
-    isLoadingFinished.value = true
+    isFinish.value = true
   }
 }
 
@@ -68,7 +66,7 @@ const fetchGuessLikeData = async () => {
 const resetGuessListData = () => {
   guessListData.value = []
   pagination.page = 1
-  isLoadingFinished.value = false
+  isFinish.value = false
 }
 
 onMounted(() => {
@@ -92,39 +90,41 @@ defineExpose({
     padding: 36rpx 0 40rpx;
     background-color: #f5f5f5;
   }
+
   .guess-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 20rpx;
+
     .guess-item {
       flex-basis: calc(50% - 10rpx);
       width: 345rpx;
       padding: 24rpx 20rpx 20rpx;
       margin-bottom: 20rpx;
       overflow: hidden;
+
       .image {
         width: 304rpx;
         height: 304rpx;
       }
+
       .name {
         height: 75rpx;
         padding: 5rpx 0;
         color: #262626;
         font-size: 26rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
       }
+
       .price {
         margin-top: 5rpx;
         color: #cf4444;
         font-size: 26rpx;
+
         .symbol {
           font-size: 80%;
         }
+
         .num {
           margin-left: 2rpx;
         }
