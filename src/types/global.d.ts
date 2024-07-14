@@ -24,3 +24,9 @@ export type PageArgs = {
   pageSize?: number
 }
 
+// 热门推荐页参数类型
+export type HotRecommedMap = {
+  type: string
+  title: string
+  url: string
+}

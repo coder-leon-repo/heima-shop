@@ -3,8 +3,8 @@
   <CustomNavbar></CustomNavbar>
   <scroll-view
     scroll-y
-    @scrolltolower="onScrollToLower"
     refresher-enabled
+    @scrolltolower="onScrollToLower"
     @refresherrefresh="onRefresh"
     :refresher-triggered="isTriggered"
   >
@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import IndexSkeleton from './components/IndexSkeleton.vue'
 import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
@@ -42,8 +44,6 @@ import type {
   CategoryItem,
   HotItem
 } from '@/types/home'
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
 import type { XtxGuessInstance } from '@/types/component'
 
 // 获取轮播图数据
@@ -70,6 +70,7 @@ const fetchHomeHotData = async () => {
   homeHotData.value = result
 }
 
+// 猜你喜欢组件实例
 const guessLikeRef = ref<XtxGuessInstance>()
 
 // 监听滚动条到达底部 >下拉加载更多
@@ -83,15 +84,12 @@ const isTriggered = ref(false)
 // 监听自定义下拉刷新
 const onRefresh = async () => {
   isTriggered.value = true
-
   guessLikeRef.value?.resetGuessListData()
-
   await Promise.all([
     fetchHomeBannerData(),
     fetchHomeCategoryData(),
     fetchHomeHotData()
   ])
-
   isTriggered.value = false
 }
 
@@ -101,15 +99,14 @@ const isShowSkeleton = ref(false)
 // 页面加载
 onLoad(async () => {
   isShowSkeleton.value = true
-
   await Promise.all([
     fetchHomeBannerData(),
     fetchHomeCategoryData(),
     fetchHomeHotData()
   ])
-
   isShowSkeleton.value = false
 })
+
 </script>
 
 <style lang="scss">
