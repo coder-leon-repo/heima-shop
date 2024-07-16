@@ -106,7 +106,6 @@ onLoad(async () => {
   ])
   isShowSkeleton.value = false
 })
-
 </script>
 
 <style lang="scss">

@@ -16,7 +16,7 @@
     ]
   },
   "vueCompilerOptions": {
-    "plugins": ["./uni-app-native-tags-plugin"]
+    "plugins": ["./uni-app-native-tags"]
   },
   "include": [
     "src/**/*.ts",
