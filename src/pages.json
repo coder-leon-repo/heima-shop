@@ -41,10 +41,7 @@
       }
     },
     {
-      "path": "pages/recommend/recommend",
-      "style": {
-        "navigationBarTitleText": "热门推荐"
-      }
+      "path": "pages/recommend/recommend"
     }
   ],
   "globalStyle": {

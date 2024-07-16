@@ -2,57 +2,66 @@
   <view class="recommend">
     <!-- 推荐封面 -->
     <view class="cover">
-      <image
-        class="image"
-        src="http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-05-20/84abb5b1-8344-49ae-afc1-9cb932f3d593.jpg"
-      />
+      <image class="image" :src="bannerPictureUrl" />
     </view>
     <!-- 选项卡 -->
     <view class="tabs">
-      <view class="text">抢先尝鲜</view>
-      <view class="text active">新品预告</view>
+      <view
+        class="text"
+        :class="{ active: index === active }"
+        v-for="(item, index) in subTypesData"
+        :key="item.id"
+        @tap="active = index"
+        >{{ item.title }}</view
+      >
     </view>
-    <scroll-view class="scroll-view" scroll-y>
+    <!-- 商品列表 -->
+    <scroll-view
+      class="scroll-view"
+      scroll-y
+      v-for="(item, index) in subTypesData"
+      :key="item.id"
+      v-show="index === active"
+      @scrolltolower="onScrollToLower"
+    >
       <view class="goods">
         <navigator
           class="goods-item"
-          v-for="item in 10"
-          :key="item"
+          v-for="goods in item.goodsItems.items"
+          :key="goods.id"
         >
-          <image
-            class="image"
-            src="https://yanxuan-item.nosdn.127.net/5e7864647286c7447eeee7f0025f8c11.png"
-          />
-          <view class="name ellipsis"
-            >不含酒精，使用安心爽肤清洁湿巾
-            不含酒精，使用安心爽肤清洁湿巾不含酒精，使用安心爽肤清洁湿巾不含酒精，使用安心爽肤清洁湿巾不含酒精，使用安心爽肤清洁湿巾</view
-          >
+          <image class="image" :src="goods.picture" />
+          <view class="name ellipsis">{{ goods.name }}</view>
           <view class="price">
             <text class="symbol">¥</text>
-            <text class="num">29.90</text>
+            <text class="num">{{ goods.price }}</text>
           </view>
         </navigator>
       </view>
-      <view class="loading-text"> 加载更多... </view>
+      <view class="loading-text">
+        {{ item.finish ? '没有更多数据~' : '加载更多...' }}
+      </view>
     </scroll-view>
   </view>
 </template>
 
 <script lang="ts" setup>
 import { HOT_Recommend_MAP } from '@/constants'
+import { getHotRecommendData } from '@/service/api/recommend'
 import { cloneDeep } from 'lodash-es'
+import { onLoad } from '@dcloudio/uni-app'
+import { reactive, ref } from 'vue'
+import type { subTypeItem } from '@/types/recommend'
 
 /* 接受首页传递的数据 */
 const query = defineProps<{
-  type: number
+  type: string
 }>()
 
 const hotRecommendMap = cloneDeep(HOT_Recommend_MAP)
 
-const type = String(query.type)
-
 const currentHotMap = hotRecommendMap.find(
-  (item) => item.type === type
+  (item) => item.type === query.type
 )
 
 // 动态设置标题
@@ -62,7 +71,63 @@ uni.setNavigationBarTitle({
 
 const currentHotUrl = currentHotMap!.url
 
-console.log(currentHotUrl)
+// 选项卡选中索引
+const active = ref(0)
+
+const bannerPictureUrl = ref('')
+
+const subTypesData = ref<(subTypeItem & { finish?: Boolean })[]>(
+  []
+)
+
+const pageParams = reactive({
+  page: import.meta.env.DEV ? 33 : 1,
+  pageSize: 10
+})
+
+// 获取热门推荐数据
+const fetchHotRecommendData = async () => {
+  const res = await getHotRecommendData(
+    currentHotUrl,
+    pageParams
+  )
+
+  bannerPictureUrl.value = res.result.bannerPicture
+  subTypesData.value = res.result.subTypes
+}
+
+onLoad(() => {
+  fetchHotRecommendData()
+})
+
+// 滚动触底->加载更多数据
+const onScrollToLower = async () => {
+  // 当前选项卡数据
+  const currentSubTypes = subTypesData.value[active.value]
+  const page = currentSubTypes.goodsItems.page
+  const pages = currentSubTypes.goodsItems.pages
+
+  if (page < pages) {
+    currentSubTypes.goodsItems.page++
+  } else {
+    currentSubTypes.finish = true
+    return
+  }
+
+  const res = await getHotRecommendData(currentHotUrl, {
+    subType: currentSubTypes.id,
+    page: currentSubTypes.goodsItems.page,
+    pageSize: currentSubTypes.goodsItems.pageSize
+  })
+
+  // 新的列表数据
+  const newSubTypes = res.result.subTypes[active.value]
+
+  // 追加新的数据
+  currentSubTypes.goodsItems.items.push(
+    ...newSubTypes.goodsItems.items
+  )
+}
 </script>
 
 <style lang="scss" scoped>

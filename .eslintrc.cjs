@@ -32,6 +32,7 @@ module.exports = {
     'vue/no-setup-props-destructure': ['off'],
     'vue/no-deprecated-html-element-is': ['off'],
     'vue/no-unused-vars': ['off'],
+    'vue/valid-v-for': ['off'],
     '@typescript-eslint/no-unused-vars': ['off'],
     'no-empty': ['off']
   }

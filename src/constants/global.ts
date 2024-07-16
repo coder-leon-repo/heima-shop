@@ -1,4 +1,4 @@
-import type { HotRecommedMap } from '@/types/global'
+import type { HotRecommedMap } from '@/types/recommend'
 
 export const HOT_Recommend_MAP: HotRecommedMap[] = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
