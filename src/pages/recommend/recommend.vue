@@ -76,6 +76,7 @@ const active = ref(0)
 
 const bannerPictureUrl = ref('')
 
+// 不同选项卡的数据
 const subTypesData = ref<(subTypeItem & { finish?: Boolean })[]>(
   []
 )
@@ -107,6 +108,7 @@ const onScrollToLower = async () => {
   const page = currentSubTypes.goodsItems.page
   const pages = currentSubTypes.goodsItems.pages
 
+  // 分页条件
   if (page < pages) {
     currentSubTypes.goodsItems.page++
   } else {
@@ -174,8 +176,8 @@ const onScrollToLower = async () => {
       width: 40rpx;
       height: 4rpx;
       background-color: #27ba9b;
-      transform: translate(-50%);
       position: absolute;
+      transform: translate(-50%);
       left: 50%;
       bottom: 0;
     }

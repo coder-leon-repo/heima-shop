@@ -14,10 +14,17 @@
     >
       保存用户信息
     </button>
-    <button @tap="memberStore.clearProfile()" size="mini" plain type="warn">
+    <button
+      @tap="memberStore.clearProfile()"
+      size="mini"
+      plain
+      type="warn"
+    >
       清理用户信息
     </button>
-    <button @tap="fetchData" size="mini" plain type="primary">测试请求</button>
+    <button @tap="fetchData" size="mini" plain type="primary">
+      测试请求
+    </button>
   </view>
 </template>
 

@@ -6,10 +6,7 @@
       :circular="true"
       @change="onSlideChange"
     >
-      <swiper-item
-        v-for="item in carouselData"
-        :key="item.id"
-      >
+      <swiper-item v-for="item in carouselData" :key="item.id">
         <navigator
           url="/pages/index/index"
           hover-class="none"
