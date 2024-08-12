@@ -1,8 +1,9 @@
 import { createSSRApp } from 'vue'
 import pinia from './store'
-import './styles/main.scss'
-
 import App from './App.vue'
+
+import './styles/index.scss'
+
 export function createApp() {
   const app = createSSRApp(App)
 

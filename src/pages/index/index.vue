@@ -12,9 +12,7 @@
     <IndexSkeleton v-if="isShowSkeleton"></IndexSkeleton>
     <template v-else>
       <!-- 通用轮播图 -->
-      <XtxSwiper
-        :carousel-data="homeBannerData"
-      ></XtxSwiper>
+      <XtxSwiper :carousel-data="homeBannerData"></XtxSwiper>
       <!-- 分类面板 -->
       <CategoryPanel
         :category-data="homeCategoryData"
