@@ -47,11 +47,11 @@
 
 <script lang="ts" setup>
 import { HOT_Recommend_MAP } from '@/constants'
-import { getHotRecommendData } from '@/service/api/recommend'
 import { cloneDeep } from 'lodash-es'
 import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref } from 'vue'
 import type { subTypeItem } from '@/types/recommend'
+import { getHotRecommendData } from '@/service'
 
 /* 接受首页传递的数据 */
 const query = defineProps<{
