@@ -6,7 +6,7 @@
       :circular="true"
       @change="onSlideChange"
     >
-      <swiper-item v-for="item in carouselData" :key="item.id">
+      <swiper-item v-for="item in swiperData" :key="item.id">
         <navigator
           url="/pages/index/index"
           hover-class="none"
@@ -24,7 +24,7 @@
     <view class="indicator">
       <text
         class="dot"
-        v-for="(item, index) in carouselData.length"
+        v-for="(item, index) in swiperData?.length"
         :key="item"
         :class="{ active: active === index }"
       >
@@ -38,7 +38,7 @@ import type { BannerItem } from '@/types/home'
 import { ref } from 'vue'
 
 defineProps<{
-  carouselData: BannerItem[]
+  swiperData: BannerItem[]
 }>()
 
 // 当前轮播图索引
