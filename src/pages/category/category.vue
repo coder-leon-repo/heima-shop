@@ -1,5 +1,5 @@
 <template>
-  <view class="wrapper">
+  <view class="wrapper" v-if="isShow">
     <!-- 搜索框 -->
     <view class="search">
       <view class="input">
@@ -12,12 +12,12 @@
       <scroll-view class="primary" scroll-y>
         <view
           class="item"
-          v-for="(item, index) in 10"
-          :key="item"
+          v-for="(item, index) in categoryListData"
+          :key="item.id"
           :class="{ active: index === active }"
           @tap="active = index"
         >
-          <text class="name">居家</text>
+          <text class="name">{{ item.name }}</text>
         </view>
       </scroll-view>
       <!-- 二级分类 -->
@@ -27,31 +27,31 @@
         </view>
         <view
           class="section"
-          v-for="(item, index) in 3"
-          :key="index"
+          v-for="item in categorySubListData"
+          :key="item.id"
         >
           <view class="title-container">
-            <view class="title-text">宠物用品</view>
+            <view class="title-text">{{ item.name }}</view>
             <view class="more">更多</view>
           </view>
           <view class="product-container">
             <navigator
               class="product-item"
-              v-for="item in 4"
-              :key="item"
-              :url="`/pages/goods/goods?id=`"
+              v-for="goods in item.goods"
+              :key="goods.id"
+              :url="`/pages/goods/goods?id=${goods.id}`"
             >
               <image
                 class="image"
-                src="https://yanxuan-item.nosdn.127.net/674ec7a88de58a026304983dd049ea69.jpg"
-                alt=""
+                :src="goods.picture"
+                :alt="goods.desc"
               />
               <h3 class="name ellipsis">
-                木天蓼逗猫棍 木天蓼逗猫棍 木天蓼逗猫棍
+                {{ goods.name }}
               </h3>
               <view class="price">
                 <text class="symbol">¥</text>
-                <text class="num">99.90</text>
+                <text class="num">{{ goods.price }}</text>
               </view>
             </navigator>
           </view>
@@ -59,14 +59,19 @@
       </scroll-view>
     </view>
   </view>
+  <PageSkeleton v-else></PageSkeleton>
 </template>
-<script setup lang="ts">
-import XtxSwiper from '@/components/XtxSwiper.vue'
-import { getHomeBannerData } from '@/service'
-import type { BannerItem } from '@/types/home'
-import { onLoad } from '@dcloudio/uni-app'
 
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { getCateoryTopData, getHomeBannerData } from '@/service'
+import type { BannerItem } from '@/types/home'
+import type {
+  CategoryChildItem,
+  CategoryTopItem
+} from '@/types/category'
+import PageSkeleton from './components/PageSkeleton.vue'
 
 // 一级分类索引
 const active = ref(0)
@@ -80,8 +85,27 @@ const fetchHomeBannerData = async () => {
   bannerList.value = res.result
 }
 
-onLoad(() => {
-  fetchHomeBannerData()
+const categoryListData = ref<CategoryTopItem[]>([])
+
+const categorySubListData = computed<CategoryChildItem[]>(() => {
+  return categoryListData.value[active.value]?.children || []
+})
+
+const fetchCategoryTopData = async () => {
+  const res = await getCateoryTopData()
+  categoryListData.value = res.result
+}
+
+const isShow = ref(false)
+
+onLoad(async () => {
+  console.log(isShow.value)
+  await Promise.all([
+    fetchHomeBannerData(),
+    fetchCategoryTopData()
+  ])
+  isShow.value = true
+  console.log(isShow.value)
 })
 </script>
 
@@ -205,7 +229,7 @@ page {
   .product-item {
     margin: 20rpx 30rpx 20rpx 0;
     width: 150rpx;
-    &:nth-child(3) {
+    &:nth-child(3n) {
       margin-right: 0;
     }
     .image {
