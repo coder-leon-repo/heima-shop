@@ -8,7 +8,7 @@
     >
       <swiper-item v-for="item in swiperData" :key="item.id">
         <navigator
-          url="/pages/index/index"
+          :url="`/pages/goods/goods?id=${item.id}`"
           hover-class="none"
           class="swiper-item"
         >

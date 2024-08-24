@@ -6,8 +6,8 @@ export const getHotRecommendData = (
   data?: HotArgs
 ) => {
   return http<HotResult>({
-    url,
     method: 'GET',
+    url,
     data
   })
 }
