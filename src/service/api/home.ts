@@ -10,8 +10,8 @@ import type {
 // 首页-轮播图
 export const getHomeBannerData = (distributionSite = 1) => {
   return http<BannerItem[]>({
-    url: '/home/banner',
     method: 'GET',
+    url: '/home/banner',
     data: {
       distributionSite
     }
@@ -21,8 +21,8 @@ export const getHomeBannerData = (distributionSite = 1) => {
 // 首页-分类信息
 export const getHomeCategoryData = () => {
   return http<CategoryItem[]>({
-    url: '/home/category/mutli',
-    method: 'GET'
+    method: 'GET',
+    url: '/home/category/mutli'
   })
 }
 
@@ -37,8 +37,8 @@ export const getHomeHotItemData = () => {
 // 猜你喜欢
 export const getGuessLikeData = (data?: PageArgs) => {
   return http<PageResult<GuessItem>>({
-    url: '/home/goods/guessLike',
     method: 'GET',
+    url: '/home/goods/guessLike',
     data
   })
 }

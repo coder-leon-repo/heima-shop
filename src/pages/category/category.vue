@@ -99,13 +99,11 @@ const fetchCategoryTopData = async () => {
 const isShow = ref(false)
 
 onLoad(async () => {
-  console.log(isShow.value)
   await Promise.all([
     fetchHomeBannerData(),
     fetchCategoryTopData()
   ])
   isShow.value = true
-  console.log(isShow.value)
 })
 </script>
 

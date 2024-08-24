@@ -3,7 +3,7 @@ import type { CategoryTopItem } from '@/types/category'
 
 export const getCateoryTopData = () => {
   return http<CategoryTopItem[]>({
-    url: '/category/top',
-    method: 'GET'
+    method: 'GET',
+    url: '/category/top'
   })
 }

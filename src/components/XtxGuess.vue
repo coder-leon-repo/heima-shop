@@ -6,9 +6,9 @@
     <view class="guess-content">
       <navigator
         class="guess-item"
-        url="/pages/index/index"
         v-for="item in guessListData"
         :key="item.id"
+        :url="`/pages/goods/goods?id=${item.id}`"
       >
         <image
           class="image"
@@ -17,6 +17,7 @@
         />
         <view class="name ellipsis">
           {{ item.name }}
+          {{ item.id }}
         </view>
         <view class="price">
           <text class="symbol">¥</text>
