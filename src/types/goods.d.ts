@@ -1,5 +1,6 @@
 import type { GoodsItem } from './global'
 
+// 商品详情类型
 export type GoodsResult = {
   specs: SpecsItem[]
   skus: SkusItem[]

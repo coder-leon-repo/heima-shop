@@ -36,21 +36,22 @@ uni.addInterceptor('request', httpInterceptor)
 // 拦截 uploadFile 请求
 uni.addInterceptor('uploadFile', httpInterceptor)
 
-interface Data<T> {
+interface ResponeData<T> {
   code: string
   msg: string
   result: T
 }
 
 export const http = <T>(options: UniApp.RequestOptions) => {
-  return new Promise<Data<T>>((resolve, reject) => {
+  return new Promise<ResponeData<T>>((resolve, reject) => {
     uni.request({
       ...options,
       // 响应成功
       success(res) {
         // 响应成功状态码
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data as Data<T>)
+          resolve(res.data as ResponeData<T>)
+          
         } else if (res.statusCode === 401) {
           // 401错误 -> 清空会员信息 -> 跳转到登录页面
           const memberStore = useMemberStore()
@@ -63,7 +64,9 @@ export const http = <T>(options: UniApp.RequestOptions) => {
           // 其他错误 -> 后端返回的错误
           uni.showToast({
             icon: 'none',
-            title: (res.data as Data<T>).msg || DEFAULT_REQUEST_ERROR_MSG
+            title:
+              (res.data as ResponeData<T>).msg ||
+              DEFAULT_REQUEST_ERROR_MSG
           })
           reject(res)
         }

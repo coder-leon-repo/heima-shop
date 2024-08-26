@@ -1,3 +1,4 @@
+import type { MemberInfo } from '@/types/member'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -6,10 +7,10 @@ export const useMemberStore = defineStore(
   'memberStore',
   () => {
     // 会员信息
-    const profile = ref<any>()
+    const profile = ref<MemberInfo>()
 
     // 保存会员信息，登录时使用
-    const setProfile = (val: any) => {
+    const setProfile = (val: MemberInfo) => {
       profile.value = val
     }
 
