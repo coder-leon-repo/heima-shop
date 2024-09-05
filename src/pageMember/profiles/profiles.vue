@@ -14,7 +14,7 @@
     </view>
     <!-- 头像 -->
     <view class="avatar">
-      <view class="avatar-content">
+      <view class="avatar-content" @tap="onChangeAvatar()">
         <image
           class="image"
           :src="profiles?.avatar"
@@ -107,6 +107,7 @@
 
 <script setup lang="ts">
 import { getProfilesInfo } from '@/service/api/member'
+import { useMemberStore } from '@/store'
 import type { ProfileDetails } from '@/types/member'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -118,6 +119,45 @@ const profiles = ref<ProfileDetails>()
 const fetchProfilesInfo = async () => {
   const res = await getProfilesInfo()
   profiles.value = res.result
+}
+
+const memberStore = useMemberStore()
+
+const onChangeAvatar = () => {
+  uni.chooseImage({
+    count: 1,
+    sizeType: ['original'], //可以指定是原图还是压缩图，默认二者都有
+    sourceType: ['album'], //从相册选择
+    success: (res) => {
+      // 图片路径
+      const tempFilePath = res.tempFilePaths[0]
+      // 上传文件
+      uni.uploadFile({
+        url: '/member/profile/avatar',
+        name: 'file',
+        filePath: tempFilePath,
+        success: (res) => {
+          if (res.statusCode === 200) {
+            const { avatar } = JSON.parse(res.data).result
+            // 更新头像
+            profiles.value!.avatar = avatar
+            // 更新store
+            memberStore.profile!.avatar = avatar
+
+            uni.showToast({
+              icon: 'success',
+              title: '头像上传成功'
+            })
+          } else {
+            uni.showToast({
+              icon: 'error',
+              title: '头像上传失败'
+            })
+          }
+        }
+      })
+    }
+  })
 }
 
 onLoad(() => {
