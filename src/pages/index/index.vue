@@ -42,7 +42,9 @@ import type {
   CategoryItem,
   HotItem
 } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
+import { useGuessLike } from '@/hooks/guess-like'
+
+const { guessLikeRef, onScrollToLower } = useGuessLike()
 
 // 获取轮播图数据
 const homeBannerData = ref<BannerItem[]>([])
@@ -66,14 +68,6 @@ const homeHotData = ref<HotItem[]>([])
 const fetchHomeHotData = async () => {
   const { result } = await getHomeHotItemData()
   homeHotData.value = result
-}
-
-// 猜你喜欢组件实例
-const guessLikeRef = ref<XtxGuessInstance>()
-
-// 监听滚动条到达底部 >下拉加载更多
-const onScrollToLower = () => {
-  guessLikeRef.value?.fetchGuessLikeData()
 }
 
 // 自定义下拉刷新状态
