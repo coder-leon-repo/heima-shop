@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { postLoginByPhoneNumber } from '@/service'
 import { useMemberStore } from '@/store'
-import type { MemberInfo } from '@/types/member'
+import type { LoginResult } from '@/types/member'
 
 const onGetPhoneNumberMock = async () => {
   try {
@@ -58,7 +58,7 @@ const onGetPhoneNumberMock = async () => {
   }
 }
 
-const handleLogin = (profiles: MemberInfo) => {
+const handleLogin = (profiles: LoginResult) => {
   const memberStore = useMemberStore()
   memberStore.setProfile(profiles)
 }

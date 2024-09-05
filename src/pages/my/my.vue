@@ -13,22 +13,22 @@
       <!-- 情况1：已登录 -->
       <view class="overview" v-if="isLogin">
         <navigator
-          url="/pageMember/profile/profile"
+          url="/pageMember/profiles/profiles"
           hover-class="none"
         >
           <image
             class="avatar"
             mode="aspectFill"
-            :src="profile?.avatar"
+            :src="profiles?.avatar"
           ></image>
         </navigator>
         <view class="meta">
           <view class="nickname">
-            {{ profile?.nickname || profile?.account }}
+            {{ profiles?.nickname || profiles?.account }}
           </view>
           <navigator
             class="extra"
-            url="/pageMember/profile/profile"
+            url="/pageMember/profiles/profile"
             hover-class="none"
           >
             <text class="update">更新头像昵称</text>
@@ -125,9 +125,7 @@ const isLogin = computed(() => {
   return memberStore.profile
 })
 
-const profile = computed(() => {
-  return memberStore.profile
-})
+const profiles = computed(() => memberStore.profile)
 </script>
 
 <style lang="scss">
