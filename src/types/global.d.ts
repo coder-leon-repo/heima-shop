@@ -23,3 +23,6 @@ export type PageArgs = {
   page?: number
   pageSize?: number
 }
+
+// 位置编码
+export type IFullLocationCode = [string, string, string]

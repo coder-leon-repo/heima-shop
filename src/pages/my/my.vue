@@ -31,7 +31,9 @@
             url="/pageMember/profiles/profile"
             hover-class="none"
           >
-            <text class="update">更新头像昵称</text>
+            <text class="update" @tap="onToProfiles()"
+              >更新头像昵称</text
+            >
           </navigator>
         </view>
       </view>
@@ -53,7 +55,9 @@
             未登录
           </navigator>
           <view class="extra">
-            <text class="tips">点击登录账号</text>
+            <text class="tips" @tap="onToLogin()"
+              >点击登录账号</text
+            >
           </view>
         </view>
       </view>
@@ -126,6 +130,18 @@ const isLogin = computed(() => {
 })
 
 const profiles = computed(() => memberStore.profile)
+
+const onToLogin = () => {
+  uni.navigateTo({
+    url: '/pages/login/login'
+  })
+}
+
+const onToProfiles = () => {
+  uni.navigateTo({
+    url: '/pageMember/profiles/profiles'
+  })
+}
 </script>
 
 <style lang="scss">
