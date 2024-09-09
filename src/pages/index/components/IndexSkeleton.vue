@@ -5,11 +5,11 @@
       style="height: 154px"
     >
       <swiper
-        circular="true"
+        :circular="true"
         class="data-v-17cc3903 XtxSwiper--data-v-17cc3903"
-        interval="3000"
-        current="0"
-        autoplay="false"
+        :interval="3000"
+        :current="0"
+        :autoplay="false"
       >
         <swiper-item
           class="data-v-17cc3903 XtxSwiper--data-v-17cc3903"

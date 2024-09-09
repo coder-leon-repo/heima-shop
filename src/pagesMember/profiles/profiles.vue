@@ -130,7 +130,7 @@ const memberStore = useMemberStore()
 const profilesData = ref({} as ProfileDetails)
 
 // 获取个人信息
-const fetchProfilesInfo = async () => {
+const getProfilesData = async () => {
   const res = await getProfilesAPI()
   profilesData.value = res.result
 }
@@ -194,46 +194,36 @@ const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
 
 // 提交表单
 const onSubmit = async () => {
-  try {
-    const { nickname, gender, birthday, profession } =
-      profilesData.value
+  const { nickname, gender, birthday, profession } =
+    profilesData.value
 
-    const res = await putProfilesAPI({
-      nickname,
-      gender,
-      birthday,
-      profession,
-      provinceCode: fullLocationCode[0] || undefined,
-      cityCode: fullLocationCode[1] || undefined,
-      countyCode: fullLocationCode[2] || undefined
-    })
+  const res = await putProfilesAPI({
+    nickname,
+    gender,
+    birthday,
+    profession,
+    provinceCode: fullLocationCode[0] || undefined,
+    cityCode: fullLocationCode[1] || undefined,
+    countyCode: fullLocationCode[2] || undefined
+  })
 
-    // 更新 memberStore
-    memberStore.profile = res.result
+  // 更新 memberStore
+  memberStore.profile = res.result
 
-    // 成功提示
-    uni.showToast({
-      icon: 'success',
-      title: '保存成功'
-    })
+  // 成功提示
+  uni.showToast({
+    icon: 'success',
+    title: '保存成功'
+  })
 
-    // 返回上一页
-    setTimeout(() => {
-      uni.navigateBack()
-    }, 400)
-  } catch (error) {
-    if (error) {
-      // 失败提示
-      uni.showToast({
-        icon: 'error',
-        title: '保存失败'
-      })
-    }
-  }
+  // 返回上一页
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 300)
 }
 
 onLoad(() => {
-  fetchProfilesInfo()
+  getProfilesData()
 })
 </script>
 
