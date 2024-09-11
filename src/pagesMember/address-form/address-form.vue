@@ -1,24 +1,28 @@
 <template>
   <view class="content">
-    <form>
+    <uni-forms
+      ref="addressFormRef"
+      :model="addressForm"
+      :rules="addressFormRules"
+    >
       <!-- 表单内容 -->
-      <view class="form-item">
+      <uni-forms-item class="form-item" name="receiver">
         <text class="label">收货人</text>
         <input
           class="input"
           placeholder="请填写收货人姓名"
           v-model="addressForm.receiver"
         />
-      </view>
-      <view class="form-item">
+      </uni-forms-item>
+      <uni-forms-item class="form-item" name="contact">
         <text class="label">手机号码</text>
         <input
           class="input"
           placeholder="请填写收货人手机号码"
           v-model="addressForm.contact"
         />
-      </view>
-      <view class="form-item">
+      </uni-forms-item>
+      <uni-forms-item class="form-item" name="fullLocation">
         <text class="label">所在地区</text>
         <picker
           class="picker"
@@ -33,15 +37,15 @@
             >请选择省/市/区(县)</view
           >
         </picker>
-      </view>
-      <view class="form-item">
+      </uni-forms-item>
+      <uni-forms-item class="form-item" name="address">
         <text class="label">详细地址</text>
         <input
           class="input"
           placeholder="街道、楼牌号等信息"
           v-model="addressForm.address"
         />
-      </view>
+      </uni-forms-item>
       <view class="form-item">
         <label class="label">设为默认地址</label>
         <switch
@@ -51,7 +55,7 @@
           @change="onChangeSwitch($event)"
         />
       </view>
-    </form>
+    </uni-forms>
   </view>
   <!-- 提交按钮 -->
   <button class="button" @tap="onSubmit()">保存并使用</button>
@@ -86,8 +90,42 @@ const addressForm = ref({
   cityCode: '', // 城市编码(后端参数)
   countyCode: '', // 区/县编码(后端参数)
   address: '', // 详细地址
-  isDefault: 0 // 默认地址，1为是，0为否
+  isDefault: 1 // 默认地址，1为是，0为否
 })
+
+const addressFormRef = ref()
+
+// 自定义表单校验规则
+const addressFormRules = {
+  receiver: {
+    rules: [{ required: true, errorMessage: '请填写收货人姓名' }]
+  },
+  fullLocation: {
+    rules: [
+      {
+        required: true,
+        errorMessage: '请选择所在地区'
+      }
+    ]
+  },
+  contact: {
+    rules: [
+      { required: true, errorMessage: '请填写联系方式' },
+      {
+        pattern: /^1[3-9]\d{9}$/,
+        errorMessage: '手机号格式不正确'
+      }
+    ]
+  },
+  address: {
+    rules: [
+      {
+        required: true,
+        errorMessage: '请填写详细地址'
+      }
+    ]
+  }
+}
 
 // 监听省市区选项
 const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
@@ -114,24 +152,35 @@ const fetchMemberAddressDetails = async () => {
 
 // 提交表单
 const onSubmit = async () => {
-  if (query.id) {
-    // 修改收获地址
-    await putMemberAddress(query.id, addressForm.value)
-  } else {
-    // 新建收获地址
-    await postMemberAddress(addressForm.value)
+  try {
+    // 表单校验证
+    await addressFormRef?.value?.validate()
+
+    // 根据有无id参数，判断调用接口。
+    if (query.id) {
+      // 修改收获地址
+      await putMemberAddress(query.id, addressForm.value)
+    } else {
+      // 新建收获地址
+      await postMemberAddress(addressForm.value)
+    }
+
+    // 成功提示
+    uni.showToast({
+      title: query.id ? '修改成功' : '添加成功',
+      icon: 'success'
+    })
+
+    // 返回上一页
+    setTimeout(() => {
+      uni.navigateBack()
+    }, 400)
+  } catch (error) {
+    uni.showToast({
+      icon: 'error',
+      title: '请填写完整信息'
+    })
   }
-
-  // 成功提示
-  uni.showToast({
-    title: query.id ? '修改成功' : '添加成功',
-    icon: 'success'
-  })
-
-  // 返回上一页
-  setTimeout(() => {
-    uni.navigateBack()
-  }, 400)
 }
 
 onLoad(() => {

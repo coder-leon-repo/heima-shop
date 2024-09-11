@@ -41,3 +41,11 @@ export const getAddressDetailsById = (id: string) => {
     url: `/member/address/${id}`
   })
 }
+
+// 删除收获地址
+export const deleteMemberAddress = (id: string) => {
+  return http({
+    method: 'DELETE',
+    url: `/member/address/${id}`
+  })
+}
