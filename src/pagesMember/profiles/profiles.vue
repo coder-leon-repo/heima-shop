@@ -112,12 +112,9 @@
 </template>
 
 <script setup lang="ts">
-import {
-  getProfilesAPI,
-  putProfilesAPI
-} from '@/service/api/member'
+import { getProfiles, putProfiles } from '@/service/api/member'
 import { useMemberStore } from '@/store'
-import type { IFullLocationCode } from '@/types/global'
+import type { FullLocationCode } from '@/types/global'
 import type { Gender, ProfileDetails } from '@/types/member'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -130,8 +127,8 @@ const memberStore = useMemberStore()
 const profilesData = ref({} as ProfileDetails)
 
 // 获取个人信息
-const getProfilesData = async () => {
-  const res = await getProfilesAPI()
+const fetchProfilesData = async () => {
+  const res = await getProfiles()
   profilesData.value = res.result
 }
 
@@ -184,7 +181,7 @@ const onChangeBirthday: UniHelper.DatePickerOnChange = (e) => {
 }
 
 // 位置编码
-let fullLocationCode: IFullLocationCode = ['', '', '']
+let fullLocationCode: FullLocationCode = ['', '', '']
 
 // 修改城市
 const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
@@ -197,7 +194,7 @@ const onSubmit = async () => {
   const { nickname, gender, birthday, profession } =
     profilesData.value
 
-  const res = await putProfilesAPI({
+  const res = await putProfiles({
     nickname,
     gender,
     birthday,
@@ -207,8 +204,8 @@ const onSubmit = async () => {
     countyCode: fullLocationCode[2] || undefined
   })
 
-  // 更新 memberStore
-  memberStore.profile = res.result
+  // 更新store的nickname
+  memberStore.profile!.nickname = res.result.nickname
 
   // 成功提示
   uni.showToast({
@@ -219,11 +216,11 @@ const onSubmit = async () => {
   // 返回上一页
   setTimeout(() => {
     uni.navigateBack()
-  }, 300)
+  }, 400)
 }
 
 onLoad(() => {
-  getProfilesData()
+  fetchProfilesData()
 })
 </script>
 

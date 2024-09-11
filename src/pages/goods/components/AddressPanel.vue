@@ -6,26 +6,21 @@
     <view class="title">配送至</view>
     <!-- 内容 -->
     <view class="content">
-      <view class="item">
-        <view class="user">李明 13824686868</view>
-        <view class="address"
-          >北京市顺义区后沙峪地区安平北街6号院</view
+      <view
+        class="item"
+        v-for="item in addressList"
+        :key="item.id"
+      >
+        <view class="user"
+          >{{ item.receiver }} {{ item.contact }}</view
         >
-        <text class="icon icon-checked"></text>
-      </view>
-      <view class="item">
-        <view class="user">王东 13824686868</view>
-        <view class="address"
-          >北京市顺义区后沙峪地区安平北街6号院</view
-        >
-        <text class="icon icon-ring"></text>
-      </view>
-      <view class="item">
-        <view class="user">张三 13824686868</view>
-        <view class="address"
-          >北京市朝阳区孙河安平北街6号院</view
-        >
-        <text class="icon icon-ring"></text>
+        <view class="address">{{
+          item.fullLocation.replace(/\s+/g, '') + item.address
+        }}</view>
+        <text
+          class="icon icon-checked"
+          v-if="item.isDefault"
+        ></text>
       </view>
     </view>
     <view class="footer">
@@ -36,9 +31,26 @@
 </template>
 
 <script setup lang="ts">
+import { getMemberAddressList } from '@/service/api/address'
+import type { AddressItem } from '@/types/goods'
+import { onMounted, ref } from 'vue'
+
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
+
+// 收货地址列表
+const addressList = ref<AddressItem[]>()
+
+// 获取收货地址列表
+const getAddressListData = async () => {
+  const res = await getMemberAddressList()
+  addressList.value = res.result
+}
+
+onMounted(() => {
+  getAddressListData()
+})
 </script>
 
 <style lang="scss">

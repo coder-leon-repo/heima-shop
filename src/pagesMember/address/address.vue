@@ -8,7 +8,7 @@
           <view class="item">
             <view
               class="item-content"
-              v-for="item in addressListData"
+              v-for="item in addressList"
               :key="item.id"
             >
               <view class="user">
@@ -38,7 +38,7 @@
     <view class="add-btn">
       <navigator
         hover-class="none"
-        url="/pagesMember/address-form/address-form?id=0"
+        url="/pagesMember/address-form/address-form"
       >
         新建地址
       </navigator>
@@ -47,23 +47,23 @@
 </template>
 
 <script setup lang="ts">
-import { getMemberAddressListAPI } from '@/service/api/address'
+import { getMemberAddressList } from '@/service/api/address'
 import type { AddressItem } from '@/types/address'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
 // 收货地址列表
-const addressListData = ref<AddressItem[]>()
+const addressList = ref<AddressItem[]>()
 
 // 获取收货地址列表
-const getAddressListData = async () => {
-  const res = await getMemberAddressListAPI()
-  addressListData.value = res.result
+const fetchAddressListData = async () => {
+  const res = await getMemberAddressList()
+  addressList.value = res.result
 }
 
 // 显示页面
 onShow(() => {
-  getAddressListData()
+  fetchAddressListData()
 })
 </script>
 

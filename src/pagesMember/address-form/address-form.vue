@@ -59,7 +59,12 @@
 </template>
 
 <script setup lang="ts">
-import { postMemberAddressAPI } from '@/service/api/address'
+import {
+  getAddressDetailsById,
+  postMemberAddress,
+  putMemberAddress
+} from '@/service/api/address'
+import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
 // 查询参数
@@ -69,7 +74,7 @@ const query = defineProps<{
 
 // 动态设置标题
 uni.setNavigationBarTitle({
-  title: query.id === '0' ? '添加收货地址' : '修改收货地址'
+  title: query.id ? '修改地址' : '新建地址'
 })
 
 // 表单数据
@@ -84,11 +89,10 @@ const addressForm = ref({
   isDefault: 0 // 默认地址，1为是，0为否
 })
 
-// 修改请省/市/区(县)
+// 监听省市区选项
 const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
   // 更新前端页面
   addressForm.value.fullLocation = e.detail.value.join(' ')
-
   // 更新后端省/市/区(县)的编码
   addressForm.value.provinceCode = e.detail.code![0]
   addressForm.value.cityCode = e.detail.code![1]
@@ -100,18 +104,39 @@ const onChangeSwitch: UniHelper.SwitchOnChange = (e) => {
   addressForm.value.isDefault = Number(e.detail.value)
 }
 
-// 保存地址表单
+// 修改地址页面 => 根据id获取收获地址详情
+const fetchMemberAddressDetails = async () => {
+  if (query.id) {
+    const res = await getAddressDetailsById(query.id)
+    addressForm.value = res.result
+  }
+}
+
+// 提交表单
 const onSubmit = async () => {
-  // 新建地址地址请求
-  await postMemberAddressAPI(addressForm.value)
+  if (query.id) {
+    // 修改收获地址
+    await putMemberAddress(query.id, addressForm.value)
+  } else {
+    // 新建收获地址
+    await postMemberAddress(addressForm.value)
+  }
+
+  // 成功提示
   uni.showToast({
-    title: '保存成功',
+    title: query.id ? '修改成功' : '添加成功',
     icon: 'success'
   })
+
+  // 返回上一页
   setTimeout(() => {
     uni.navigateBack()
   }, 400)
 }
+
+onLoad(() => {
+  fetchMemberAddressDetails()
+})
 </script>
 
 <style lang="scss">

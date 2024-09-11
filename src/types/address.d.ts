@@ -26,7 +26,7 @@ export type MemberAddressParams = Omit<
   'id' | 'fullLocation'
 >
 
-// 添加收获地址返回结果
-export type PutMemberAddressResult = {
+// 添加修改收获地址返回结果
+export type AddressOperationResult = {
   id: string
 }

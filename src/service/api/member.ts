@@ -5,7 +5,7 @@ import type {
 import { http } from '../request'
 
 // 获取个人信息
-export const getProfilesAPI = () => {
+export const getProfiles = () => {
   return http<ProfileDetails>({
     method: 'GET',
     url: '/member/profile'
@@ -13,7 +13,7 @@ export const getProfilesAPI = () => {
 }
 
 // 修改个人信息
-export const putProfilesAPI = (data: ProfileParams) => {
+export const putProfiles = (data: ProfileParams) => {
   return http<ProfileDetails>({
     method: 'PUT',
     url: '/member/profile',

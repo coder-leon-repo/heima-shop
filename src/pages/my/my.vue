@@ -13,7 +13,7 @@
       <!-- 情况1：已登录 -->
       <view class="overview" v-if="isLogin">
         <navigator
-          url="/pageMember/profiles/profiles"
+          url="/pagesMember/profiles/profiles"
           hover-class="none"
         >
           <image
@@ -28,7 +28,7 @@
           </view>
           <navigator
             class="extra"
-            url="/pageMember/profiles/profile"
+            url="/pagesMember/profiles/profile"
             hover-class="none"
           >
             <text class="update" @tap="onToProfiles()"
@@ -63,7 +63,7 @@
       </view>
       <navigator
         class="settings"
-        url="/pageMember/settings/settings"
+        url="/pagesMember/settings/settings"
         hover-class="none"
       >
         设置
@@ -139,7 +139,7 @@ const onToLogin = () => {
 
 const onToProfiles = () => {
   uni.navigateTo({
-    url: '/pageMember/profiles/profiles'
+    url: '/pagesMember/profiles/profiles'
   })
 }
 </script>

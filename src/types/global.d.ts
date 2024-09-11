@@ -25,4 +25,4 @@ export type PageArgs = {
 }
 
 // 位置编码
-export type IFullLocationCode = [string, string, string]
+export type FullLocationCode = [string, string, string]

@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { HOT_Recommend_MAP } from '@/constants'
+import { HOT_RECOMMEND } from '@/constants'
 import { cloneDeep } from 'lodash-es'
 import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref } from 'vue'
@@ -59,7 +59,7 @@ const query = defineProps<{
   type: string
 }>()
 
-const hotRecommendMap = cloneDeep(HOT_Recommend_MAP)
+const hotRecommendMap = cloneDeep(HOT_RECOMMEND)
 
 const currentHotMap = hotRecommendMap.find(
   (item) => item.type === query.type
