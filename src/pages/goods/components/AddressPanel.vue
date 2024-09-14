@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import { getMemberAddressList } from '@/service/api/address'
-import type { AddressItem } from '@/types/goods'
-import { onMounted, ref } from 'vue'
+import type { AddressItem } from '@/types/address'
+import { ref, onMounted } from 'vue'
 
 const emit = defineEmits<{
   (e: 'close'): void

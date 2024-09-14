@@ -39,7 +39,10 @@
         <view class="desc">{{ goodsData?.desc }}</view>
       </view>
       <view class="panel-container">
-        <view class="panel-item">
+        <view
+          class="panel-item"
+          @tap="onOpenSkuPopup(SkuMode.Both)"
+        >
           <text class="left-text">选择</text>
           <text class="center-text">请选择商品规格 </text>
         </view>
@@ -130,6 +133,7 @@
         url="/pages/"
         open-type="navigate"
         hover-class="navigator-hover"
+        @tap="onOpenSkuPopup(SkuMode.Car)"
       >
         <text> 加入购物车 </text>
       </navigator>
@@ -138,6 +142,7 @@
         url="/pages/"
         open-type="navigate"
         hover-class="navigator-hover"
+        @tap="onOpenSkuPopup(SkuMode.Buy)"
       >
         <text> 立即购买 </text>
       </navigator>
@@ -158,6 +163,17 @@
       @close="onClosePopup()"
     />
   </uni-popup>
+  // sku组件
+  <vk-data-goods-sku-popup
+    ref="skuPopupRef"
+    v-model="isShowSkuPopup"
+    border-radius="20"
+    add-cart-background-color="#FFA868"
+    buy-now-background-color="#27BA9B"
+    :z-index="990"
+    :localdata="localdata"
+    :mode="mode"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -167,16 +183,43 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import AddressPanel from './components/AddressPanel.vue'
 import ServicePanel from './components/ServicePanel.vue'
+import VkDataGoodsSkuPopup from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup.vue'
+import type {
+  SkuPopupInstance,
+  SkuPopupLocaldata
+} from '@/components/vk-data-goods-sku-popup/vl-data-goods-sku-popup'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
+// 商品id
 const query = defineProps<{ id: string }>()
 
+// 商品数据
 const goodsData = ref<GoodsResult>()
 
+// 获取商品数据
 const fetchGoodsById = async () => {
   const res = await getGoodsById(query.id)
   goodsData.value = res.result
+  // sku组件数据
+  localdata.value = {
+    _id: res.result.id,
+    name: res.result.name,
+    goods_thumb: res.result.mainPictures[0],
+    spec_list: res.result.specs.map((v) => ({
+      name: v.name,
+      list: v.values
+    })),
+    sku_list: res.result.skus.map((v) => ({
+      _id: v.id,
+      goods_id: res.result.id,
+      goods_name: res.result.name,
+      image: v.picture,
+      price: Number(v.price) * 100,
+      stock: v.inventory,
+      sku_name_arr: v.specs.map((vv) => vv.valueName)
+    }))
+  }
 }
 
 // 当前轮播图索引
@@ -195,6 +238,7 @@ const onTapSwiper = (url: string) => {
   })
 }
 
+// uni-app popup弹窗
 const popup = ref<{
   open: () => void
   close: () => void
@@ -202,13 +246,38 @@ const popup = ref<{
 
 const popupName = ref<'address' | 'service'>()
 
+// 侦听打开弹窗
 const onOpenPopup = (name: typeof popupName.value) => {
   popupName.value = name
   popup.value?.open()
 }
 
+// 侦听关闭弹窗口
 const onClosePopup = () => {
   popup.value?.close()
+}
+
+// sku实例
+const skuPopupRef = ref<SkuPopupInstance>()
+
+// 是否显示sku弹窗
+const isShowSkuPopup = ref(false)
+
+// sku数据
+const localdata = ref({} as SkuPopupLocaldata)
+
+// 按钮模式
+enum SkuMode {
+  Both = 1,
+  Car = 2,
+  Buy = 3
+}
+
+const mode = ref(SkuMode.Buy)
+
+const onOpenSkuPopup = (val: SkuMode) => {
+  isShowSkuPopup.value = true
+  mode.value = val
 }
 
 onLoad(() => {
