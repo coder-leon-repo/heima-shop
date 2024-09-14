@@ -1,62 +1,109 @@
 <template>
-  <view class="index">
-    <!-- 自定义导航条 -->
-    <CustomNavbar></CustomNavbar>
-    <!-- 通用轮播图 -->
-    <XtxSwiper :carousel-data="homeBannerData"></XtxSwiper>
-    <CategoryPanel
-      :category-data="homeCategoryData"
-    ></CategoryPanel>
-    <HotPanel :hot-data="homeHotData"></HotPanel>
-  </view>
+  <!-- 自定义导航条 -->
+  <CustomNavbar></CustomNavbar>
+  <scroll-view
+    scroll-y
+    refresher-enabled
+    @scrolltolower="onScrollToLower"
+    @refresherrefresh="onRefresh"
+    :refresher-triggered="isTriggered"
+  >
+    <!-- 骨架屏 -->
+    <IndexSkeleton v-if="isShowSkeleton"></IndexSkeleton>
+    <template v-else>
+      <!-- 通用轮播图 -->
+      <XtxSwiper :swiper-data="homeBannerData"></XtxSwiper>
+      <!-- 分类面板 -->
+      <CategoryPanel
+        :category-data="homeCategoryData"
+      ></CategoryPanel>
+      <!-- 热门推荐 -->
+      <HotPanel :hot-data="homeHotData"></HotPanel>
+      <!-- 猜你喜欢 -->
+      <XtxGuess ref="guessLikeRef"></XtxGuess>
+    </template>
+  </scroll-view>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import IndexSkeleton from './components/IndexSkeleton.vue'
 import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
 import {
-  getHomeBanner,
-  getHomeCategory,
-  getHomeHotItem
+  getHomeBannerData,
+  getHomeCategoryData,
+  getHomeHotItemData
 } from '@/service'
 import type {
   BannerItem,
   CategoryItem,
   HotItem
 } from '@/types/home'
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { useGuessLike } from '@/hooks/guess-like'
+
+const { guessLikeRef, onScrollToLower } = useGuessLike()
 
 // 获取轮播图数据
 const homeBannerData = ref<BannerItem[]>([])
 
-const fetchHomeBanner = async () => {
-  const { result } = await getHomeBanner()
+const fetchHomeBannerData = async () => {
+  const { result } = await getHomeBannerData()
   homeBannerData.value = result
 }
 
 // 获取分类数据
 const homeCategoryData = ref<CategoryItem[]>([])
 
-const fetchHomeCategory = async () => {
-  const { result } = await getHomeCategory()
+const fetchHomeCategoryData = async () => {
+  const { result } = await getHomeCategoryData()
   homeCategoryData.value = result
 }
 
 // 获取热门推荐数据
 const homeHotData = ref<HotItem[]>([])
 
-const fetchHomeHot = async () => {
-  const { result } = await getHomeHotItem()
+const fetchHomeHotData = async () => {
+  const { result } = await getHomeHotItemData()
   homeHotData.value = result
 }
 
-onLoad(() => {
-  fetchHomeBanner()
-  fetchHomeCategory()
-  fetchHomeHot()
+// 自定义下拉刷新状态
+const isTriggered = ref(false)
+
+// 监听自定义下拉刷新
+const onRefresh = async () => {
+  isTriggered.value = true
+  guessLikeRef.value?.resetGuessListData()
+  await Promise.all([
+    fetchHomeBannerData(),
+    fetchHomeCategoryData(),
+    fetchHomeHotData()
+  ])
+  isTriggered.value = false
+}
+
+// 是否显示骨架屏
+const isShowSkeleton = ref(false)
+
+// 页面加载
+onLoad(async () => {
+  isShowSkeleton.value = true
+  await Promise.all([
+    fetchHomeBannerData(),
+    fetchHomeCategoryData(),
+    fetchHomeHotData()
+  ])
+  isShowSkeleton.value = false
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+</style>

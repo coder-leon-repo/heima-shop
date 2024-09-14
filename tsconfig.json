@@ -9,17 +9,15 @@
     "lib": ["esnext", "dom"],
     "types": [
       "@dcloudio/types", // uni-app API 类型
-      "miniprogram-api-typings", // 原生微信小程序类型
       "@uni-helper/uni-app-types", // uni-app 组件类型
-      "@uni-helper/uni-ui-types" // uni-ui 组件类型
+      "@uni-helper/uni-ui-types", // uni-ui 组件类型
+      "miniprogram-api-typings" // 原生微信小程序类型
     ]
   },
   "vueCompilerOptions": {
-    "plugins": ["./uni-app-native-tags-plugin"]
+    "lib": "@vue/runtime-core",
+    "plugins": ["./uni-app-native-tags-plugin.js"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+  "exclude": ["node_modules", "dist"]
 }

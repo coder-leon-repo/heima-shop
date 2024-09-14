@@ -7,19 +7,20 @@
     }
   },
   "pages": [
-    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    // 一级页面配置
     {
       "path": "pages/index/index",
       "style": {
-        "navigationStyle": "custom", // 隐藏默认导航
+        "navigationStyle": "custom",
         "navigationBarTextStyle": "white",
         "navigationBarTitleText": "首页"
       }
     },
     {
-      "path": "pages/my/my",
+      "path": "pages/category/category",
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationBarTitleText": "商品分类"
       }
     },
     {
@@ -29,15 +30,26 @@
       }
     },
     {
-      "path": "pages/category/category",
+      "path": "pages/my/my",
       "style": {
-        "navigationBarTitleText": "分类"
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
       }
     },
     {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/recommend/recommend"
+    },
+    {
+      "path": "pages/goods/goods",
+      "style": {
+        "navigationBarTitleText": "商品详情"
       }
     }
   ],
@@ -47,7 +59,7 @@
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
-  // 设置 TabBar
+  // TabBar配置
   "tabBar": {
     "color": "#333",
     "selectedColor": "#27ba9b",
@@ -79,5 +91,46 @@
         "selectedIconPath": "static/tabs/user_selected.png"
       }
     ]
+  },
+  // 分包页面
+  "subPackages": [
+    {
+      "root": "pagesMember",
+      "pages": [
+        {
+          "path": "settings/settings",
+          "style": {
+            "navigationBarTitleText": "设置"
+          }
+        },
+        {
+          "path": "profiles/profiles",
+          "style": {
+            "navigationBarTitleText": "个人信息",
+            "navigationStyle": "custom",
+            "navigationBarTextStyle": "white"
+          }
+        },
+        {
+          "path": "address/address",
+          "style": {
+            "navigationBarTitleText": "地址管理"
+          }
+        },
+        {
+          "path": "address-form/address-form",
+          "style": {
+            "navigationBarTitleText": ""
+          }
+        }
+      ]
+    }
+  ],
+  // 分包预加载配置
+  "preloadRule": {
+    "pages/my/my": {
+      "network": "all",
+      "packages": ["pagesMember"]
+    }
   }
 }

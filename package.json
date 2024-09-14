@@ -17,7 +17,7 @@
     "dev:mp-lark": "uni -p mp-lark",
     "dev:mp-qq": "uni -p mp-qq",
     "dev:mp-toutiao": "uni -p mp-toutiao",
-    "dev:mp-weixin": "uni -p mp-weixin",
+    "dev": "uni -p mp-weixin",
     "dev:quickapp-webview": "uni -p quickapp-webview",
     "dev:quickapp-webview-huawei": "uni -p quickapp-webview-huawei",
     "dev:quickapp-webview-union": "uni -p quickapp-webview-union",
@@ -40,7 +40,8 @@
     "tsc": "vue-tsc --noEmit --skipLibCheck",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "create": "node src/scripts/create-files.cjs"
   },
   "husky": {
     "hooks": {
@@ -69,6 +70,8 @@
     "@dcloudio/uni-mp-xhs": "3.0.0-alpha-3081220230802001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3081220230802001",
     "@dcloudio/uni-ui": "^1.5.5",
+    "@uni-helper/uni-app-types": "^0.5.13",
+    "lodash-es": "^4.17.21",
     "pinia": "2.0.27",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.2.47",
@@ -82,8 +85,8 @@
     "@dcloudio/uni-vue-devtools": "3.0.0-alpha-3080220230511001",
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-3081220230802001",
     "@rushstack/eslint-patch": "^1.1.4",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^18.11.9",
-    "@uni-helper/uni-app-types": "^0.5.8",
     "@uni-helper/uni-ui-types": "^0.5.14",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
