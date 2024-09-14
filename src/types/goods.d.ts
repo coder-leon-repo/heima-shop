@@ -43,7 +43,7 @@ export type SpacesValueItem = {
   picture?: string
   desc: string
 }
-
+// sku项
 export type SkusItem = {
   id: string
   skuCode: string
@@ -59,6 +59,7 @@ export type SkusSpecsItem = {
   valueName: string
 }
 
+// 分类类型
 export type CategoriesItem = {
   id: string
   name: string
@@ -71,6 +72,7 @@ export type CategoriesItem = {
   }
 }
 
+// 详细类型
 export type Details = {
   pictures: any[]
   properties: DetailsPropertiesItem[]
@@ -106,4 +108,11 @@ export type EvaluationInfoItem = {
   praiseCount: number
   createTime: string
   praisePercent: number
+}
+
+export type AddCarParams = {
+  /* SKUID */
+  skuId: string
+  /* 数量 */
+  count: number
 }

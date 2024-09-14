@@ -44,7 +44,7 @@
           @tap="onOpenSkuPopup(SkuMode.Both)"
         >
           <text class="left-text">选择</text>
-          <text class="center-text">请选择商品规格 </text>
+          <text class="center-text">{{ goodsSelected }} </text>
         </view>
         <view class="panel-item" @tap="onOpenPopup('address')">
           <text class="left-text">送至</text>
@@ -173,18 +173,25 @@
     :z-index="990"
     :localdata="localdata"
     :mode="mode"
+    @add-cart="onAddCar"
+    :actived-style="{
+      color: '#27BA9B',
+      borderColor: '#27BA9B',
+      backgroundColor: '#E9F8F5'
+    }"
   />
 </template>
 
 <script lang="ts" setup>
-import { getGoodsById } from '@/service'
+import { getGoodsById, postMemberCar } from '@/service'
 import type { GoodsResult } from '@/types/goods'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AddressPanel from './components/AddressPanel.vue'
 import ServicePanel from './components/ServicePanel.vue'
 import VkDataGoodsSkuPopup from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup.vue'
 import type {
+  SkuPopupEvent,
   SkuPopupInstance,
   SkuPopupLocaldata
 } from '@/components/vk-data-goods-sku-popup/vl-data-goods-sku-popup'
@@ -275,9 +282,28 @@ enum SkuMode {
 
 const mode = ref(SkuMode.Buy)
 
+// 侦听打开sku弹窗
 const onOpenSkuPopup = (val: SkuMode) => {
   isShowSkuPopup.value = true
   mode.value = val
+}
+
+// 选中的商品
+const goodsSelected = computed(() => {
+  return (
+    skuPopupRef.value?.selectArr?.join(' ').trim() ||
+    '请选择商品规格'
+  )
+})
+
+// 侦听加入购物车
+const onAddCar = async (e: SkuPopupEvent) => {
+  await postMemberCar({
+    skuId: e._id,
+    count: e.buy_num
+  })
+  uni.showToast({ title: '添加成功', icon: 'success' })
+  isShowSkuPopup.value = false
 }
 
 onLoad(() => {

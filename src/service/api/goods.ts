@@ -1,4 +1,4 @@
-import type { GoodsResult } from '@/types/goods'
+import type { AddCarParams, GoodsResult } from '@/types/goods'
 import { http } from '../request'
 
 export const getGoodsById = (id: string) => {
@@ -8,5 +8,13 @@ export const getGoodsById = (id: string) => {
     data: {
       id
     }
+  })
+}
+
+export const postMemberCar = (data: AddCarParams) => {
+  return http({
+    method: 'POST',
+    url: '/member/cart',
+    data
   })
 }

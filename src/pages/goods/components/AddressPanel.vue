@@ -24,8 +24,14 @@
       </view>
     </view>
     <view class="footer">
-      <view class="button primary"> 新建地址 </view>
-      <view v-if="false" class="button primary">确定</view>
+      <view class="button primary" v-if="addressList?.length"
+        >确定</view
+      >
+      <view class="button primary" v-else>
+        <navigator url="/pagesMember/address-form/address-form">
+          新建地址
+        </navigator>
+      </view>
     </view>
   </view>
 </template>
@@ -33,8 +39,10 @@
 <script setup lang="ts">
 import { getMemberAddressList } from '@/service/api/address'
 import type { AddressItem } from '@/types/address'
-import { ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
 
+// emit事件
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
@@ -48,7 +56,7 @@ const getAddressListData = async () => {
   addressList.value = res.result
 }
 
-onMounted(() => {
+onShow(() => {
   getAddressListData()
 })
 </script>
