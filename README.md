@@ -22,10 +22,7 @@ pnpm i --registry=https://registry.npmmirror.com
 
 ```shell
 # 微信小程序端
-npm run dev:mp-weixin
-
-# H5端
-npm run dev:h5
+pnpm run dev
 
 # App端
 需 HbuilderX 工具，运行 - 运行到手机或模拟器
