@@ -1,8 +1,11 @@
 import type { XtxGuessInstance } from '@/types/component'
-import { debounce } from 'lodash-es'
 import { ref } from 'vue'
 
-export function useGuessLike() {
+/**
+ * @desc: 猜你喜欢-下载加载更多
+ * @return {*}
+ */
+export function useGuessLike(): any {
   // 猜你喜欢组件实例
   const guessLikeRef = ref<XtxGuessInstance>()
 

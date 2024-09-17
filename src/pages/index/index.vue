@@ -1,6 +1,6 @@
 <template>
   <!-- 自定义导航条 -->
-  <CustomNavbar></CustomNavbar>
+  <CustomNavbar />
   <scroll-view
     scroll-y
     refresher-enabled
@@ -9,18 +9,16 @@
     :refresher-triggered="isTriggered"
   >
     <!-- 骨架屏 -->
-    <IndexSkeleton v-if="isShowSkeleton"></IndexSkeleton>
+    <IndexSkeleton v-if="isShowSkeleton" />
     <template v-else>
       <!-- 通用轮播图 -->
-      <XtxSwiper :swiper-data="homeBannerData"></XtxSwiper>
+      <XtxSwiper :swiper-data="homeBannerData" />
       <!-- 分类面板 -->
-      <CategoryPanel
-        :category-data="homeCategoryData"
-      ></CategoryPanel>
+      <CategoryPanel :category-data="homeCategoryData" />
       <!-- 热门推荐 -->
-      <HotPanel :hot-data="homeHotData"></HotPanel>
+      <HotPanel :hot-data="homeHotData" />
       <!-- 猜你喜欢 -->
-      <XtxGuess ref="guessLikeRef"></XtxGuess>
+      <XtxGuess ref="guessLikeRef" />
     </template>
   </scroll-view>
 </template>

@@ -1,7 +1,7 @@
 import type { LoginResult } from '@/types/member'
 import { http } from '../request'
 
-export const postLoginByPhoneNumber = (phoneNumber: string) => {
+export const postLoginByPhone = (phoneNumber: string) => {
   return http<LoginResult>({
     method: 'POST',
     url: '/login/wxMin/simple',

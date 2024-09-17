@@ -32,23 +32,21 @@
 </template>
 
 <script setup lang="ts">
-import { postLoginByPhoneNumber } from '@/service'
+import { postLoginByPhone } from '@/service'
 import { useMemberStore } from '@/store'
 import type { LoginResult } from '@/types/member'
 
 const onGetPhoneNumberMock = async () => {
   try {
-    const res = await postLoginByPhoneNumber('13512345678')
+    const res = await postLoginByPhone('13512345678')
     handleLogin(res.result)
     uni.showToast({
       icon: 'success',
       title: '登录成功'
     })
     setTimeout(() => {
-      uni.switchTab({
-        url: '/pages/my/my'
-      })
-    }, 500)
+      uni.navigateBack()
+    }, 300)
   } catch (error: any) {
     const msg = error.msg
     uni.showToast({
