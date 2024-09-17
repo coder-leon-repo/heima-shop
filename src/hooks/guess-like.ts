@@ -1,5 +1,4 @@
 import type { XtxGuessInstance } from '@/types/component'
-import { debounce } from 'lodash-es'
 import { ref } from 'vue'
 
 export function useGuessLike() {

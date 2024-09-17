@@ -124,7 +124,7 @@
         <i class="icon-handset"></i>
         <text class="text">客服 </text>
       </view>
-      <view class="shop-car">
+      <view class="shop-car" @tap="goToCart">
         <i class="icon-cart"></i>
         <text class="text">购物车</text>
       </view>
@@ -194,7 +194,7 @@ import type {
   SkuPopupEvent,
   SkuPopupInstance,
   SkuPopupLocaldata
-} from '@/components/vk-data-goods-sku-popup/vl-data-goods-sku-popup'
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -213,18 +213,18 @@ const fetchGoodsById = async () => {
     _id: res.result.id,
     name: res.result.name,
     goods_thumb: res.result.mainPictures[0],
-    spec_list: res.result.specs.map((v) => ({
+    spec_list: res.result.specs.map(v => ({
       name: v.name,
       list: v.values
     })),
-    sku_list: res.result.skus.map((v) => ({
+    sku_list: res.result.skus.map(v => ({
       _id: v.id,
       goods_id: res.result.id,
       goods_name: res.result.name,
       image: v.picture,
       price: Number(v.price) * 100,
       stock: v.inventory,
-      sku_name_arr: v.specs.map((vv) => vv.valueName)
+      sku_name_arr: v.specs.map(vv => vv.valueName)
     }))
   }
 }
@@ -233,7 +233,7 @@ const fetchGoodsById = async () => {
 const active = ref(0)
 
 // 监听轮播图变化
-const onChange: UniHelper.SwiperOnChange = (e) => {
+const onChange: UniHelper.SwiperOnChange = e => {
   active.value = e.detail?.current
 }
 
@@ -304,6 +304,12 @@ const onAddCar = async (e: SkuPopupEvent) => {
   })
   uni.showToast({ title: '添加成功', icon: 'success' })
   isShowSkuPopup.value = false
+}
+
+const goToCart = () => {
+  uni.navigateTo({
+    url: '/pages/cart/cartfullpage'
+  })
 }
 
 onLoad(() => {
