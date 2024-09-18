@@ -1,8 +1,5 @@
 <template>
-  <view
-    class="navbar"
-    :style="{ paddingTop: safeAreaInsets?.top + 'px' }"
-  >
+  <view class="navbar" :style="paddingTop">
     <!-- logo文字 -->
     <view class="logo">
       <image
@@ -20,7 +17,9 @@
 </template>
 
 <script setup lang="ts">
-const { safeAreaInsets } = uni.getSystemInfoSync()
+import { useSafeArea } from '@/hooks'
+
+const { paddingTop } = useSafeArea()
 </script>
 
 <style lang="scss" scoped>

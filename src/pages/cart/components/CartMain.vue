@@ -3,6 +3,7 @@
     scroll-y
     class="scroll-view"
     @scrolltolower="onScrollToLower"
+    :style="paddingBottom"
   >
     <!-- 已登录: 显示购物车 -->
     <template v-if="memberStore.profile">
@@ -126,6 +127,7 @@
 
 <script setup lang="ts">
 import type { InputNumberBoxEvent } from '@/components/vk-data-input-number-box/vk-data-input-number-box'
+import { useSafeArea } from '@/hooks'
 import { useGuessLike } from '@/hooks/guess-like'
 import {
   deleteCartList,
@@ -138,8 +140,11 @@ import type { CartItem } from '@/types/cart'
 import { onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 
-// guessLike hooks
+// guessLikeHooks
 const { guessLikeRef, onScrollToLower } = useGuessLike()
+
+// SafeAreaHooks
+const { paddingBottom } = useSafeArea()
 
 // 会员信息
 const memberStore = useMemberStore()
@@ -210,7 +215,7 @@ const onChangeGoodsCount = async (e: InputNumberBoxEvent) => {
 
 /**
  * @desc:计算购物车商品总价数
- * @return {*}
+ * @return {number}
  */
 const totalCount = computed(() => {
   return cartList.value
@@ -220,7 +225,7 @@ const totalCount = computed(() => {
 
 /**
  * @desc: 计算购物车商品总价格
- * @return {*}
+ * @return {number}
  */
 const totalPrice = computed(() => {
   return cartList.value
