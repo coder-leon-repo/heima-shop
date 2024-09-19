@@ -1,5 +1,5 @@
 <template>
-  <view class="swiper" style="height: 280rpx">
+  <view class="swiper-container" style="height: 280rpx">
     <swiper
       :interval="3000"
       :autoplay="false"
@@ -8,13 +8,13 @@
     >
       <swiper-item v-for="item in swiperData" :key="item.id">
         <navigator
-          :url="`/pages/goods/goods?id=${item.id}`"
-          hover-class="none"
           class="swiper-item"
+          hover-class="none"
+          :url="`/pages/goods/goods?id=${item.id}`"
         >
           <image
             mode="aspectFill"
-            class="image"
+            class="swiper-image"
             :src="item.imgUrl"
           ></image>
         </navigator>
@@ -45,21 +45,15 @@ defineProps<{
 const active = ref(0)
 
 // 监听轮播图切换
-const onSlideChange: UniHelper.SwiperOnChange = (e) => {
+const onSlideChange: UniHelper.SwiperOnChange = e => {
   active.value = e.detail.current
 }
 </script>
 
 <style lang="scss" scoped>
-.swiper {
+.swiper-container {
   position: relative;
   overflow: hidden;
-
-  .swiper-item,
-  .image {
-    width: 100%;
-    height: 100%;
-  }
 
   .indicator {
     position: absolute;
@@ -81,5 +75,15 @@ const onSlideChange: UniHelper.SwiperOnChange = (e) => {
       background-color: #fff;
     }
   }
+}
+
+.swiper-item {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-image {
+  width: 100%;
+  height: 100%;
 }
 </style>

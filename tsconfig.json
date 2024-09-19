@@ -16,7 +16,7 @@
   },
   "vueCompilerOptions": {
     "lib": "@vue/runtime-core",
-    "plugins": ["./uni-app-native-tags-plugin.js"]
+    "plugins": ["./native-tags-plugin.js"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
