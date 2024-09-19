@@ -3,7 +3,6 @@
     scroll-y
     class="scroll-view"
     @scrolltolower="onScrollToLower"
-    :style="paddingBottom"
   >
     <!-- 已登录: 显示购物车 -->
     <template v-if="memberStore.profile">
@@ -91,7 +90,7 @@
         </navigator>
       </view>
       <!-- 吸底工具栏 -->
-      <view class="toolbar">
+      <view class="toolbar" :style="paddingBottom">
         <text
           class="all"
           :class="{ checked: selectAll }"
@@ -206,7 +205,9 @@ const onSelectedAllChange = async () => {
 }
 
 /**
+/**
  * @desc:修改单品数量
+ * @param {InputNumberBoxEvent} e 输入事件对象，携带了商品skuid和新的数量值
  * @return {*}
  */
 const onChangeGoodsCount = async (e: InputNumberBoxEvent) => {
