@@ -236,14 +236,14 @@ const totalPrice = computed(() => {
 })
 
 /**
- * @desc:跳转到结算页面
+ * @desc:跳转到预结算页面
  * @return {*}
  */
 const goToPayment = () => {
   if (totalCount.value === 0) {
     uni.showToast({ icon: 'none', title: '选择商品' })
   } else {
-    uni.showToast({ icon: 'none', title: '去结算' })
+    uni.navigateTo({ url: '/pagesOrder/create/create' })
   }
 }
 
