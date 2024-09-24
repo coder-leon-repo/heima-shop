@@ -174,6 +174,7 @@
     :localdata="localdata"
     :mode="mode"
     @add-cart="onAddCar"
+    @buy-now="onBuyNow"
     :actived-style="{
       color: '#27BA9B',
       borderColor: '#27BA9B',
@@ -280,6 +281,7 @@ enum SkuMode {
   Buy = 3
 }
 
+// 按钮默认值
 const mode = ref(SkuMode.Buy)
 
 // 侦听打开sku弹窗
@@ -306,12 +308,21 @@ const onAddCar = async (e: SkuPopupEvent) => {
   isShowSkuPopup.value = false
 }
 
+// 侦听立即购买 -> 传递参数
+const onBuyNow = (e: SkuPopupEvent) => {
+  uni.navigateTo({
+    url: `/pagesOrder/create/create?skuId=${e._id}&count=${e.buy_num}`
+  })
+}
+
+// 跳转到购物车页面
 const goToCart = () => {
   uni.navigateTo({
     url: '/pages/cart/cartfullpage'
   })
 }
 
+// 页面加载
 onLoad(() => {
   fetchGoodsById()
 })

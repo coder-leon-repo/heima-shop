@@ -1,4 +1,5 @@
-export type OrderPreResult = {
+// 订单返回结果
+export type OrderResult = {
   /* 商品集合 */
   goods: OrderPreGoodsItem[]
   /* 结算信息 */

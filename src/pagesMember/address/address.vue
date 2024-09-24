@@ -10,7 +10,10 @@
             v-for="item in addressList"
             :key="item.id"
           >
-            <view class="item-content">
+            <view
+              class="item-content"
+              @tap="onChangeDeliveryLocation(item)"
+            >
               <view class="user">
                 {{ item.receiver }}
                 <text class="contact">{{ item.contact }}</text>
@@ -25,6 +28,7 @@
                 class="edit"
                 hover-class="none"
                 :url="`/pagesMember/address-form/address-form?id=${item.id}`"
+                @tap.stop="() => {}"
               >
                 修改
               </navigator>
@@ -59,9 +63,13 @@ import {
   deleteMemberAddress,
   getMemberAddressList
 } from '@/service/api/address'
+import { useAddressesStore } from '@/store'
 import type { AddressItem } from '@/types/address'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+
+// 地址仓库
+const addressStore = useAddressesStore()
 
 // 收货地址列表
 const addressList = ref<AddressItem[]>()
@@ -70,13 +78,16 @@ const addressList = ref<AddressItem[]>()
 const fetchAddressListData = async () => {
   const res = await getMemberAddressList()
   addressList.value = res.result
+
+  const defaultAddress = res.result.find(v => v.isDefault === 1)
+  addressStore.setDeliveryLocation(defaultAddress)
 }
 
 // 删除收货地址
 const onDeleteMemberAddress = (id: string) => {
   uni.showModal({
     content: '删除地址?',
-    success: async (res) => {
+    success: async res => {
       if (res.confirm) {
         await deleteMemberAddress(id).then(() => {
           fetchAddressListData()
@@ -84,6 +95,12 @@ const onDeleteMemberAddress = (id: string) => {
       }
     }
   })
+}
+
+// 修改选中的收获地址
+const onChangeDeliveryLocation = (item: AddressItem) => {
+  addressStore.setDeliveryLocation(item)
+  uni.navigateBack()
 }
 
 // 显示页面

@@ -2,14 +2,18 @@
   <scroll-view scroll-y class="viewport">
     <!-- 收货地址 -->
     <navigator
-      v-if="false"
+      v-if="selectAddress"
       class="shipment"
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="user"> 张三 13333333333 </view>
+      <view class="user">
+        {{ selectAddress.receiver }}
+        {{ selectAddress.contact }}
+      </view>
       <view class="address">
-        广东省 广州市 天河区 黑马程序员3
+        {{ selectAddress.fullLocation }}
+        {{ selectAddress.address }}
       </view>
       <text class="icon icon-right"></text>
     </navigator>
@@ -99,7 +103,10 @@
         orderPre?.summary.totalPayPrice
       }}</text>
     </view>
-    <view class="button" :class="{ disabled: true }">
+    <view
+      class="button"
+      :class="{ disabled: !selectAddress.id }"
+    >
       提交订单
     </view>
   </view>
@@ -107,8 +114,12 @@
 
 <script setup lang="ts">
 import { useSafeArea } from '@/hooks'
-import { getMerberOrederPre } from '@/service/api/order'
-import type { OrderPreResult } from '@/types/order'
+import {
+  getMerberOrederNow,
+  getMerberOrederPre
+} from '@/service/api/order'
+import { useAddressesStore } from '@/store'
+import type { OrderResult } from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 
@@ -142,17 +153,44 @@ const onChangeDeliveryTime: UniHelper.SelectorPickerOnChange =
 // 订单留言
 const orderMessage = ref('')
 
+// 查询参数
+const query = defineProps<{
+  skuId: string
+  count: string
+}>()
+
 // 订单信息
-const orderPre = ref<OrderPreResult>()
+const orderPre = ref({} as OrderResult)
 
 // 获取预付订单信息
-const fetchMemberOrderPre = async () => {
-  const res = await getMerberOrederPre()
-  orderPre.value = res.result
+const fetchMemberorderPre = async () => {
+  // 立即购买页面跳转传递参数
+  if (query.skuId && query.count) {
+    const orderNowResponse = await getMerberOrederNow({
+      skuId: query.skuId,
+      count: query.count
+    })
+    orderPre.value = orderNowResponse.result
+  } else {
+    // 购物车页面结算无参数
+    const orderPreResponse = await getMerberOrederPre()
+    orderPre.value = orderPreResponse.result
+  }
 }
 
+// 地址仓库
+const addressStore = useAddressesStore()
+
+// 收货地址
+const selectAddress = computed(() => {
+  return (
+    addressStore.deliveryLocation ||
+    orderPre.value?.userAddresses.find(v => v.isDefault === 1)
+  )
+})
+
 onLoad(() => {
-  fetchMemberOrderPre()
+  fetchMemberorderPre()
 })
 </script>
 
