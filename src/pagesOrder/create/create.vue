@@ -84,13 +84,13 @@
       <view class="item">
         <text class="text">商品总价: </text>
         <text class="number symbol">{{
-          orderPre?.summary.totalPrice
+          orderPre?.summary?.totalPrice
         }}</text>
       </view>
       <view class="item">
         <text class="text">运费: </text>
         <text class="number symbol">{{
-          orderPre?.summary.postFee
+          orderPre?.summary?.postFee
         }}</text>
       </view>
     </view>
@@ -100,12 +100,13 @@
   <view class="toolbar" :style="paddingBottom">
     <view class="total-pay symbol">
       <text class="number">{{
-        orderPre?.summary.totalPayPrice
+        orderPre?.summary?.totalPayPrice
       }}</text>
     </view>
     <view
       class="button"
       :class="{ disabled: !selectAddress.id }"
+      @tap="onSubmitOrder"
     >
       提交订单
     </view>
@@ -116,10 +117,14 @@
 import { useSafeArea } from '@/hooks'
 import {
   getMerberOrederNow,
-  getMerberOrederPre
+  getMerberOrederPre,
+  postMemberOrder
 } from '@/service/api/order'
 import { useAddressesStore } from '@/store'
-import type { OrderResult } from '@/types/order'
+import type {
+  OrderResult,
+  SubmitOrderParams
+} from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 
@@ -188,6 +193,45 @@ const selectAddress = computed(() => {
     orderPre.value?.userAddresses.find(v => v.isDefault === 1)
   )
 })
+
+// 支付渠道：支付渠道，1支付宝、2微信--支付方式为在线支付时，传值，为货到付款时，不传值
+enum IPayChannel {
+  Alipay = 1,
+  WeChatPay = 2
+}
+
+//支付方式：1为在线支付，2为货到付款
+enum IPayType {
+  onlinePayment = 1,
+  cashOnDelivery = 2
+}
+
+// 提交订单
+const onSubmitOrder = async () => {
+  if (!selectAddress.value.id) {
+    uni.showToast({
+      icon: 'none',
+      title: '请选择收货地址'
+    })
+  }
+
+  const res = await postMemberOrder({
+    addressId: selectAddress.value.id,
+    buyerMessage: orderMessage.value,
+    deliveryTimeType: activeDeliveryTime.value.type,
+    goods: orderPre.value.goods.map(v => ({
+      skuId: v.skuId,
+      count: v.count
+    })),
+    payChannel: IPayChannel.WeChatPay,
+    payType: IPayType.onlinePayment
+  } as SubmitOrderParams)
+
+  // 关闭当前页面，跳转到订单详情，传递订单id。
+  uni.redirectTo({
+    url: `/pagesOrder/detail/detail?id=${res.result.id}`
+  })
+}
 
 onLoad(() => {
   fetchMemberorderPre()

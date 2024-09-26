@@ -65,3 +65,40 @@ export type UserAddressItem = {
   /* 收货人 */
   receiver: string
 }
+
+// 提交订单参数
+export type SubmitOrderParams = {
+  /**
+   * 所选地址Id
+   */
+  addressId: string
+  /**
+   * 买家留言
+   */
+  buyerMessage: string
+  /**
+   * 配送时间类型：1为不限，2为工作日，3为双休或假日
+   */
+  deliveryTimeType: number
+  /**
+   * 商品集合
+   */
+  goods: {
+    /**
+     * 数量
+     */
+    count: number
+    /**
+     * skuId
+     */
+    skuId: string
+  }[]
+  /**
+   * 支付渠道
+   */
+  payChannel: number
+  /**
+   * 支付方式
+   */
+  payType: number
+}

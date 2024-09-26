@@ -1,8 +1,12 @@
 {
   "name": "uni-app-xiaotuxian",
-  "version": "0.1.0",
   "author": {
     "name": "Leon"
+  },
+  "version": "0.1.0",
+  "engines": {
+    "node": "^20.17.0",
+    "npm": "^10.8.2"
   },
   "scripts": {
     "dev:app": "uni -p app",
@@ -38,7 +42,7 @@
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
     "tsc": "vue-tsc --noEmit --skipLibCheck",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "create": "node src/scripts/create-files.cjs"
@@ -102,5 +106,8 @@
     "typescript": "5.0.3",
     "vite": "^4.4.9",
     "vue-tsc": "^1.8.8"
+  },
+  "volta": {
+    "node": "20.17.0"
   }
 }
