@@ -70,11 +70,13 @@ uni.setNavigationBarTitle({
   title: currentHotMap!.title
 })
 
+// 当前选项卡的url
 const currentHotUrl = currentHotMap!.url
 
 // 选项卡选中索引
 const active = ref(0)
 
+// 轮播图主图地址
 const bannerPictureUrl = ref('')
 
 // 不同选项卡的数据
@@ -98,6 +100,7 @@ const fetchHotRecommendData = async () => {
   subTypesData.value = res.result.subTypes
 }
 
+// 页面初始化
 onLoad(() => {
   fetchHotRecommendData()
 })
@@ -114,7 +117,7 @@ const onScrollToLower = async () => {
     currentSubTypes.goodsItems.page++
   } else {
     currentSubTypes.finish = true
-    return
+    return void 0
   }
 
   const res = await getHotRecommendData(currentHotUrl, {

@@ -90,7 +90,9 @@
         </navigator>
       </view>
       <!-- 吸底工具栏 -->
-      <view class="toolbar" :style="paddingBottom">
+      <view class="toolbar" :style="paddingBottom"
+      v-if="cartList?.length"
+      >
         <text
           class="all"
           :class="{ checked: selectAll }"
@@ -196,7 +198,7 @@ const selectAll = computed(() => {
 const onSelectedAllChange = async () => {
   const isSelectedAll = !selectAll.value
   cartList.value?.forEach(
-    item => (item.selected = isSelectedAll)
+    item => item.selected = isSelectedAll
   )
   // 更新后端数据
   await putMemberCartSlecetdAll({

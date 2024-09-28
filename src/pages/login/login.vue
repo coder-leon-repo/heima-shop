@@ -36,6 +36,7 @@ import { postLoginByPhone } from '@/service'
 import { useMemberStore } from '@/store'
 import type { LoginResult } from '@/types/member'
 
+// 获取用户手机号
 const onGetPhoneNumberMock = async () => {
   try {
     const res = await postLoginByPhone('13512345678')
@@ -56,6 +57,7 @@ const onGetPhoneNumberMock = async () => {
   }
 }
 
+// 处理登录
 const handleLogin = (profiles: LoginResult) => {
   const memberStore = useMemberStore()
   memberStore.setProfile(profiles)

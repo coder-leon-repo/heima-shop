@@ -73,7 +73,7 @@ import type {
 } from '@/types/category'
 import PageSkeleton from './components/PageSkeleton.vue'
 
-// 一级分类索引
+// 一级分类下标
 const active = ref(0)
 
 // 轮播图数据
@@ -85,19 +85,24 @@ const fetchHomeBannerData = async () => {
   bannerList.value = res.result
 }
 
+// 分类列表数据
 const categoryListData = ref<CategoryTopItem[]>([])
 
+// 分类列表子项数据
 const categorySubListData = computed<CategoryChildItem[]>(() => {
   return categoryListData.value[active.value]?.children || []
 })
 
+// 获取分类列表数据
 const fetchCategoryTopData = async () => {
   const res = await getCateoryTopData()
   categoryListData.value = res.result
 }
 
+// 是否显示分类组件
 const isShow = ref(false)
 
+// 侦听页面加载
 onLoad(async () => {
   await Promise.all([
     fetchHomeBannerData(),

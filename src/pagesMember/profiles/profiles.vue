@@ -138,7 +138,7 @@ const onChangeAvatar = () => {
     count: 1,
     sizeType: ['original'], //可以指定是原图还是压缩图，默认二者都有
     sourceType: ['album'], //从相册选择
-    success: (res) => {
+    success: res => {
       // 图片路径
       const tempFilePath = res.tempFilePaths[0]
       // 上传文件
@@ -146,7 +146,7 @@ const onChangeAvatar = () => {
         url: '/member/profile/avatar',
         name: 'file',
         filePath: tempFilePath,
-        success: (res) => {
+        success: res => {
           if (res.statusCode === 200) {
             const { avatar } = JSON.parse(res.data).result
             // 更新头像
@@ -171,12 +171,12 @@ const onChangeAvatar = () => {
 }
 
 // 修改性别
-const onChangeGender: UniHelper.RadioGroupOnChange = (e) => {
+const onChangeGender: UniHelper.RadioGroupOnChange = e => {
   profilesData.value.gender = e.detail.value as Gender
 }
 
 // 修改日期
-const onChangeBirthday: UniHelper.DatePickerOnChange = (e) => {
+const onChangeBirthday: UniHelper.DatePickerOnChange = e => {
   profilesData.value.birthday = e.detail.value
 }
 
@@ -184,7 +184,7 @@ const onChangeBirthday: UniHelper.DatePickerOnChange = (e) => {
 let fullLocationCode: FullLocationCode = ['', '', '']
 
 // 修改城市
-const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
+const onChangeCity: UniHelper.RegionPickerOnChange = e => {
   profilesData.value.fullLocation = e.detail.value.join(' ')
   fullLocationCode = e.detail.code!
 }

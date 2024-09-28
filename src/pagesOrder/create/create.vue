@@ -114,6 +114,7 @@
 </template>
 
 <script setup lang="ts">
+import { IPayChannel, IPayType } from '@/constants/enums'
 import { useSafeArea } from '@/hooks'
 import {
   getMerberOrederNow,
@@ -194,18 +195,6 @@ const selectAddress = computed(() => {
   )
 })
 
-// 支付渠道：支付渠道，1支付宝、2微信--支付方式为在线支付时，传值，为货到付款时，不传值
-enum IPayChannel {
-  Alipay = 1,
-  WeChatPay = 2
-}
-
-//支付方式：1为在线支付，2为货到付款
-enum IPayType {
-  onlinePayment = 1,
-  cashOnDelivery = 2
-}
-
 // 提交订单
 const onSubmitOrder = async () => {
   if (!selectAddress.value.id) {
@@ -233,6 +222,7 @@ const onSubmitOrder = async () => {
   })
 }
 
+// 页面加载
 onLoad(() => {
   fetchMemberorderPre()
 })

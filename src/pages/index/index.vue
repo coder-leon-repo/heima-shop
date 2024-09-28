@@ -52,17 +52,19 @@ const fetchHomeBannerData = async () => {
   homeBannerData.value = result
 }
 
-// 获取分类数据
+// 分类数据
 const homeCategoryData = ref<CategoryItem[]>([])
 
+// 获取分类数据
 const fetchHomeCategoryData = async () => {
   const { result } = await getHomeCategoryData()
   homeCategoryData.value = result
 }
 
-// 获取热门推荐数据
+// 热门推荐数据
 const homeHotData = ref<HotItem[]>([])
 
+// 获取热门推荐数据
 const fetchHomeHotData = async () => {
   const { result } = await getHomeHotItemData()
   homeHotData.value = result

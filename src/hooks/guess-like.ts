@@ -3,9 +3,9 @@ import { ref } from 'vue'
 
 /**
  * @desc: 猜你喜欢-下载加载更多
- * @return {*}
+ * @return {guessLikeRef,onScrollToLower}
  */
-export function useGuessLike(): any {
+export function useGuessLike() {
   // 猜你喜欢组件实例
   const guessLikeRef = ref<XtxGuessInstance>()
 
