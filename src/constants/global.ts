@@ -10,14 +10,3 @@ export const HOT_RECOMMEND: HotRecommedMap[] = [
   { type: '3', title: '一站买全', url: '/hot/oneStop' },
   { type: '4', title: '新鲜好物', url: '/hot/new' }
 ]
-
-// 订单状态列表
-export const ORDER_STATE_LIST = [
-  { id: 0, text: '' },
-  { id: 1, text: '待付款' },
-  { id: 2, text: '待发货' },
-  { id: 3, text: '待收货' },
-  { id: 4, text: '待评价' },
-  { id: 5, text: '已完成' },
-  { id: 6, text: '已取消' }
-]

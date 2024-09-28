@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { getProfiles, putProfiles } from '@/service/api/member'
+import { getProfiles, putProfiles } from '@/service'
 import { useMemberStore } from '@/store'
 import type { FullLocationCode } from '@/types/global'
 import type { Gender, ProfileDetails } from '@/types/member'

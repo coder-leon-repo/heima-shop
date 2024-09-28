@@ -6,9 +6,9 @@
   >
     <view class="wrap">
       <navigator
-        v-if="pages.length > 1"
-        open-type="navigateBack"
         class="back icon-left"
+        open-type="navigateBack"
+        v-if="pages.length > 1"
       ></navigator>
       <navigator
         v-else
@@ -26,17 +26,21 @@
     id="scroller"
     @scrolltolower="onScrollToLower"
   >
-    <template v-if="true">
+    <template v-if="order">
       <!-- 订单状态 -->
       <view
         class="overview"
         :style="{ paddingTop: safeAreaInsets!.top + 20 + 'px' }"
       >
         <!-- 待付款状态:展示去支付按钮和倒计时 -->
-        <template v-if="true">
+        <template
+          v-if="order.orderState === IOrderStatus.pendingPayment"
+        >
           <view class="status icon-clock">等待付款</view>
           <view class="tips">
-            <text class="money">应付金额: ¥ 99.00</text>
+            <text class="money"
+              >应付金额: ¥ {{ order.payMoney }}</text
+            >
             <text class="time">支付剩余</text>
             00 时 29 分 59 秒
           </view>
@@ -45,7 +49,9 @@
         <!-- 其他订单状态:展示再次购买按钮 -->
         <template v-else>
           <!-- 订单状态文字 -->
-          <view class="status"> 待付款 </view>
+          <view class="status">
+            {{ ORDER_STATE_LIST[order.orderState].text }}
+          </view>
           <view class="button-group">
             <navigator
               class="button"
@@ -55,7 +61,15 @@
               再次购买
             </navigator>
             <!-- 待发货状态：模拟发货,开发期间使用,用于修改订单状态为已发货 -->
-            <view v-if="false" class="button"> 模拟发货 </view>
+            <view
+              v-if="
+                IDEV &&
+                order.orderState === IOrderStatus.pendingShipment
+              "
+              class="button"
+            >
+              模拟发货
+            </view>
           </view>
         </template>
       </view>
@@ -155,7 +169,9 @@
         :style="{ paddingBootom: safeAreaInsets?.bottom + 'px' }"
       >
         <!-- 待付款状态:展示支付按钮 -->
-        <template v-if="true">
+        <template
+          v-if="order.orderState === IOrderStatus.pendingPayment"
+        >
           <view class="button primary"> 去支付 </view>
           <view class="button" @tap="popup?.open?.()">
             取消订单
@@ -171,11 +187,32 @@
             再次购买
           </navigator>
           <!-- 待收货状态: 展示确认收货 -->
-          <view class="button primary"> 确认收货 </view>
+          <view
+            class="button primary"
+            v-if="
+              order.orderState === IOrderStatus.pendingReceipt
+            "
+          >
+            确认收货
+          </view>
           <!-- 待评价状态: 展示去评价 -->
-          <view class="button"> 去评价 </view>
+          <view
+            class="button"
+            v-if="
+              order.orderState === IOrderStatus.pendingReviews
+            "
+          >
+            去评价
+          </view>
           <!-- 待评价/已完成/已取消 状态: 展示删除订单 -->
-          <view class="button delete"> 删除订单 </view>
+          <view
+            class="button delete"
+            v-if="
+              order.orderState >= IOrderStatus.pendingReviews
+            "
+          >
+            删除订单
+          </view>
         </template>
       </view>
     </template>
@@ -211,8 +248,11 @@
 </template>
 
 <script setup lang="ts">
+import { IDEV } from '@/constants/global'
 import { useGuessLike } from '@/hooks'
-import { onReady } from '@dcloudio/uni-app'
+import { getMemberOrderById } from '@/service'
+import type { OrderDetailResult } from '@/types/order'
+import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
 // 获取屏幕边界到安全区域距离
@@ -300,6 +340,41 @@ onReady(() => {
       }
     )
   )
+})
+
+// 订单状态列表
+const ORDER_STATE_LIST = [
+  { id: 0, text: '' },
+  { id: 1, text: '待付款' },
+  { id: 2, text: '待发货' },
+  { id: 3, text: '待收货' },
+  { id: 4, text: '待评价' },
+  { id: 5, text: '已完成' },
+  { id: 6, text: '已取消' }
+]
+
+// 订单状态枚举
+enum IOrderStatus {
+  pendingPayment = 1,
+  pendingShipment = 2,
+  pendingReceipt = 3,
+  pendingReviews = 4,
+  completedTasks = 5,
+  canceledTasks = 6
+}
+
+// 订单详情数据
+const order = ref<OrderDetailResult>()
+
+// 获取订单详情
+const fetchOrderDetail = async () => {
+  const res = await getMemberOrderById(query.id)
+  order.value = res.result
+}
+
+// 页面初始化
+onLoad(async () => {
+  fetchOrderDetail()
 })
 </script>
 

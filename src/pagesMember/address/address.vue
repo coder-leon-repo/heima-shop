@@ -62,7 +62,7 @@
 import {
   deleteMemberAddress,
   getMemberAddressList
-} from '@/service/api/address'
+} from '@/service'
 import { useAddressesStore } from '@/store'
 import type { AddressItem } from '@/types/address'
 import { onShow } from '@dcloudio/uni-app'

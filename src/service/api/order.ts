@@ -1,12 +1,13 @@
 import type {
-  OrderResult,
+  OrderDetailResult,
+  OrderPreResult,
   SubmitOrderParams
 } from '@/types/order'
 import { http } from '../request'
 
 // 获取用户预支付订单
 export const getMerberOrederPre = () => {
-  return http<OrderResult>({
+  return http<OrderPreResult>({
     method: 'GET',
     url: '/member/order/pre'
   })
@@ -18,7 +19,7 @@ export const getMerberOrederNow = (data: {
   count: string
   addressId?: string
 }) => {
-  return http<OrderResult>({
+  return http<OrderPreResult>({
     method: 'GET',
     url: '/member/order/pre/now',
     data
@@ -35,5 +36,13 @@ export const postMemberOrder = (data: SubmitOrderParams) => {
     method: 'POST',
     url: '/member/order',
     data
+  })
+}
+
+// 获取订单详情
+export const getMemberOrderById = (id: string) => {
+  return http<OrderDetailResult>({
+    method: 'GET',
+    url: `/member/order/${id}`
   })
 }

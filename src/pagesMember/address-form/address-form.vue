@@ -67,7 +67,7 @@ import {
   getAddressDetailsById,
   postMemberAddress,
   putMemberAddress
-} from '@/service/api/address'
+} from '@/service'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
@@ -128,7 +128,7 @@ const addressFormRules = {
 }
 
 // 监听省市区选项
-const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
+const onChangeCity: UniHelper.RegionPickerOnChange = e => {
   // 更新前端页面
   addressForm.value.fullLocation = e.detail.value.join(' ')
   // 更新后端省/市/区(县)的编码
@@ -138,7 +138,7 @@ const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
 }
 
 // 设置为默认地址
-const onChangeSwitch: UniHelper.SwitchOnChange = (e) => {
+const onChangeSwitch: UniHelper.SwitchOnChange = e => {
   addressForm.value.isDefault = Number(e.detail.value)
 }
 

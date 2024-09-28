@@ -114,16 +114,15 @@
 </template>
 
 <script setup lang="ts">
-import { IPayChannel, IPayType } from '@/constants/enums'
 import { useSafeArea } from '@/hooks'
 import {
   getMerberOrederNow,
   getMerberOrederPre,
   postMemberOrder
-} from '@/service/api/order'
+} from '@/service'
 import { useAddressesStore } from '@/store'
 import type {
-  OrderResult,
+  OrderPreResult,
   SubmitOrderParams
 } from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
@@ -166,7 +165,7 @@ const query = defineProps<{
 }>()
 
 // 订单信息
-const orderPre = ref({} as OrderResult)
+const orderPre = ref({} as OrderPreResult)
 
 // 获取预付订单信息
 const fetchMemberorderPre = async () => {
@@ -194,6 +193,18 @@ const selectAddress = computed(() => {
     orderPre.value?.userAddresses.find(v => v.isDefault === 1)
   )
 })
+
+// 支付渠道：支付渠道，1支付宝、2微信--支付方式为在线支付时，传值，为货到付款时，不传值
+enum IPayChannel {
+  Alipay = 1,
+  WeChatPay = 2
+}
+
+//支付方式：1为在线支付，2为货到付款
+enum IPayType {
+  onlinePayment = 1,
+  cashOnDelivery = 2
+}
 
 // 提交订单
 const onSubmitOrder = async () => {
