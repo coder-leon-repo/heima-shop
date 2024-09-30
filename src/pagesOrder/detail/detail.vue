@@ -42,9 +42,16 @@
               >应付金额: ¥ {{ order.payMoney }}</text
             >
             <text class="time">支付剩余</text>
-            00 时 29 分 59 秒
+            <uni-countdown
+              color="#fff"
+              splitor-color="#fff"
+              :show-day="false"
+              :show-colon="false"
+              :second="order.countdown"
+              @timeup="onTimeup"
+            ></uni-countdown>
           </view>
-          <view class="button">去支付</view>
+          <view class="button" @tap="onPayment">去支付</view>
         </template>
         <!-- 其他订单状态:展示再次购买按钮 -->
         <template v-else>
@@ -121,7 +128,12 @@
             </view>
           </navigator>
           <!-- 待评价状态:展示按钮 -->
-          <view class="action" v-if="order.orderState === IOrderStatus.pendingReviews">
+          <view
+            class="action"
+            v-if="
+              order.orderState === IOrderStatus.pendingReviews
+            "
+          >
             <view class="button primary">申请售后</view>
             <navigator url="" class="button"> 去评价 </navigator>
           </view>
@@ -175,7 +187,9 @@
         <template
           v-if="order.orderState === IOrderStatus.pendingPayment"
         >
-          <view class="button primary"> 去支付 </view>
+          <view class="button primary" @tap="onPayment">
+            去支付
+          </view>
           <view class="button" @tap="popup?.open?.()">
             取消订单
           </view>
@@ -253,7 +267,7 @@
 <script setup lang="ts">
 import { IDEV } from '@/constants/global'
 import { useGuessLike } from '@/hooks'
-import { getMemberOrderById } from '@/service'
+import { getMemberOrderById, getPayMentMock } from '@/service'
 import type { OrderDetailResult } from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -287,6 +301,7 @@ const onCopy = (id: string) => {
 
 // 获取页面参数
 const query = defineProps<{
+  // 订单id
   id: string
 }>()
 
@@ -373,7 +388,23 @@ const order = ref<OrderDetailResult>()
 const fetchOrderDetail = async () => {
   const res = await getMemberOrderById(query.id)
   order.value = res.result
-  order.value.orderState = 2
+  // order.value.orderState = 2
+}
+
+// 倒计时结束取消订单
+const onTimeup = () => {
+  order.value!.orderState = IOrderStatus.canceledTasks
+}
+
+// 支付操作
+const onPayment = async () => {
+  if (IDEV) {
+    await getPayMentMock({ orderId: query.id }).then(() => {
+      uni.navigateTo({
+        url: `/pagesOrder/payment/payment?id=${query.id}`
+      })
+    })
+  }
 }
 
 // 页面初始化

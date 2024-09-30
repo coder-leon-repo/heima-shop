@@ -39,7 +39,11 @@ export const postMemberOrder = (data: SubmitOrderParams) => {
   })
 }
 
-// 获取订单详情
+/**
+ * @desc:获取订单详情
+ * @param {string} id 订单ID
+ * @return {*}
+ */
 export const getMemberOrderById = (id: string) => {
   return http<OrderDetailResult>({
     method: 'GET',
@@ -56,5 +60,29 @@ export const getMemberOrderRepurchaseById = (id: string) => {
   return http<OrderPreResult>({
     method: 'GET',
     url: `/member/order/repurchase${id}`
+  })
+}
+
+/**
+ * @desc: 模拟发货，订单状态为待发货时，可模拟发货。
+ * @param {string} id 订单id
+ * @return {*}
+ */
+export const getMemberOrderConsignmentById = (id: string) => {
+  return http<{ msg: string }>({
+    method: 'GET',
+    url: `/member/order/consignment/${id}`
+  })
+}
+
+/**
+ * @desc:获取订单物流信息
+ * @param {string} id
+ * @return {*}
+ */
+export const getMemberOrderLogisticsById = (id: string) => {
+  return http({
+    method: 'GET',
+    url: `/member/order/${id}/logistics`
   })
 }
