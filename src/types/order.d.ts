@@ -3,7 +3,7 @@ export type OrderPreResult = {
   /* 商品集合 */
   goods: OrderPreGoodsItem[]
   /* 结算信息 */
-  summary: {
+  summary?: {
     /* 邮费 */
     postFee: number
     /* 商品总价 */
@@ -84,26 +84,18 @@ export type SubmitOrderParams = {
    * 商品集合
    */
   goods: {
-    /**
-     * 数量
-     */
+    /* 数量 */
     count: number
-    /**
-     * skuId
-     */
+    /* skuId */
     skuId: string
   }[]
-  /**
-   * 支付渠道
-   */
+  /* 支付渠道 */
   payChannel: number
-  /**
-   * 支付方式
-   */
+  /* 支付方式 */
   payType: number
 }
 
-/** 订单详情 返回信息 */
+/** 订单详情返回信息 */
 export type OrderDetailResult = {
   /** 订单编号 */
   id: string

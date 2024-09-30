@@ -78,15 +78,18 @@
         <!-- 订单物流信息 -->
         <view v-for="item in 1" :key="item" class="item">
           <view class="message">
-            您已在广州市天河区黑马程序员完成取件，感谢使用菜鸟驿站，期待再次为您服务。
+            <!-- {{  }} -->
           </view>
           <view class="date"> 2023-04-14 13:14:20 </view>
         </view>
         <!-- 用户收货地址 -->
         <view class="locate">
-          <view class="user"> 张三 13333333333 </view>
+          <view class="user">
+            {{ order.receiverContact }}
+            {{ order.receiverMobile }}
+          </view>
           <view class="address">
-            广东省 广州市 天河区 黑马程序员
+            {{ order.receiverAddress }}
           </view>
         </view>
       </view>
@@ -96,8 +99,8 @@
         <view class="item">
           <navigator
             class="navigator"
-            v-for="item in 2"
-            :key="item"
+            v-for="item in order.skus"
+            :key="item.id"
             :url="`/pages/goods/goods?id=${item}`"
             hover-class="none"
           >
@@ -106,21 +109,19 @@
               src="https://yanxuan-item.nosdn.127.net/c07edde1047fa1bd0b795bed136c2bb2.jpg"
             ></image>
             <view class="meta">
-              <view class="name ellipsis"
-                >ins风小碎花泡泡袖衬110-160cm</view
-              >
-              <view class="type">藏青小花， 130</view>
+              <view class="name ellipsis">{{ item.name }}</view>
+              <view class="type">{{ item.attrsText }}</view>
               <view class="price">
                 <view class="actual">
                   <text class="symbol">¥</text>
-                  <text>99.00</text>
+                  <text>{{ item.curPrice }}</text>
                 </view>
               </view>
-              <view class="quantity">x1</view>
+              <view class="quantity">{{ item.quantity }}</view>
             </view>
           </navigator>
           <!-- 待评价状态:展示按钮 -->
-          <view class="action" v-if="true">
+          <view class="action" v-if="order.orderState === IOrderStatus.pendingReviews">
             <view class="button primary">申请售后</view>
             <navigator url="" class="button"> 去评价 </navigator>
           </view>
@@ -129,15 +130,17 @@
         <view class="total">
           <view class="row">
             <view class="text">商品总价: </view>
-            <view class="symbol">99.00</view>
+            <view class="symbol">{{ order.totalMoney }}</view>
           </view>
           <view class="row">
             <view class="text">运费: </view>
-            <view class="symbol">10.00</view>
+            <view class="symbol">{{ order.postFee }}</view>
           </view>
           <view class="row">
             <view class="text">应付金额: </view>
-            <view class="symbol primary">109.00</view>
+            <view class="symbol primary">{{
+              order.payMoney
+            }}</view>
           </view>
         </view>
       </view>
@@ -152,7 +155,7 @@
               >复制</text
             >
           </view>
-          <view class="item">下单时间: 2023-04-14 13:14:20</view>
+          <view class="item">{{ order.createTime }}</view>
         </view>
       </view>
 
@@ -353,7 +356,7 @@ const ORDER_STATE_LIST = [
   { id: 6, text: '已取消' }
 ]
 
-// 订单状态枚举
+// 枚举订单状态
 enum IOrderStatus {
   pendingPayment = 1,
   pendingShipment = 2,
@@ -370,6 +373,7 @@ const order = ref<OrderDetailResult>()
 const fetchOrderDetail = async () => {
   const res = await getMemberOrderById(query.id)
   order.value = res.result
+  order.value.orderState = 2
 }
 
 // 页面初始化

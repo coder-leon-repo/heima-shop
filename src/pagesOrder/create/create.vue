@@ -116,15 +116,13 @@
 <script setup lang="ts">
 import { useSafeArea } from '@/hooks'
 import {
+  getMemberOrderRepurchaseById,
   getMerberOrederNow,
   getMerberOrederPre,
   postMemberOrder
 } from '@/service'
 import { useAddressesStore } from '@/store'
-import type {
-  OrderPreResult,
-  SubmitOrderParams
-} from '@/types/order'
+import type { OrderPreResult, SubmitOrderParams } from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 
@@ -160,24 +158,30 @@ const orderMessage = ref('')
 
 // 查询参数
 const query = defineProps<{
-  skuId: string
-  count: string
+  skuId?: string
+  count?: string
+  orderId?: string
 }>()
 
 // 订单信息
 const orderPre = ref({} as OrderPreResult)
 
-// 获取预付订单信息
+// 根据不同页面传递的参数，获取预付订单信息。
 const fetchMemberorderPre = async () => {
-  // 立即购买页面跳转传递参数
+  // 立即购买页面
   if (query.skuId && query.count) {
     const orderNowResponse = await getMerberOrederNow({
       skuId: query.skuId,
       count: query.count
     })
     orderPre.value = orderNowResponse.result
+  } else if (query.orderId) {
+    // 再次购买
+    const orderRepurchaseResponse =
+      await getMemberOrderRepurchaseById(query.orderId)
+    orderPre.value = orderRepurchaseResponse.result
   } else {
-    // 购物车页面结算无参数
+    // 购物车页面-无参数
     const orderPreResponse = await getMerberOrederPre()
     orderPre.value = orderPreResponse.result
   }

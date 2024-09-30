@@ -46,3 +46,15 @@ export const getMemberOrderById = (id: string) => {
     url: `/member/order/${id}`
   })
 }
+
+/**
+ * @desc:再次购买商品
+ * @param {string} id 订单ID
+ * @return {OrderPreResult}
+ */
+export const getMemberOrderRepurchaseById = (id: string) => {
+  return http<OrderPreResult>({
+    method: 'GET',
+    url: `/member/order/repurchase${id}`
+  })
+}
