@@ -86,3 +86,15 @@ export const getMemberOrderLogisticsById = (id: string) => {
     url: `/member/order/${id}/logistics`
   })
 }
+
+/**
+ * @desc:确认收货
+ * @param {string} id 订单id
+ * @return {OrderDetailResult}
+ */
+export const putMemberReceiptByid = (id: string) => {
+  return http<OrderDetailResult>({
+    method: 'PUT',
+    url: `/member/order/${id}/receipt`
+  })
+}

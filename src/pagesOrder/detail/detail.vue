@@ -210,6 +210,7 @@
             v-if="
               order.orderState === IOrderStatus.pendingReceipt
             "
+            @tap="onMemberReceipt"
           >
             确认收货
           </view>
@@ -271,7 +272,8 @@ import { useGuessLike } from '@/hooks'
 import {
   getMemberOrderById,
   getMemberOrderConsignmentById,
-  getPayMentMock
+  getPayMentMock,
+  putMemberReceiptByid
 } from '@/service'
 import type { OrderDetailResult } from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
@@ -382,8 +384,8 @@ enum IOrderStatus {
   pendingShipment = 2,
   pendingReceipt = 3,
   pendingReviews = 4,
-  completedTasks = 5,
-  canceledTasks = 6
+  completedOrder = 5,
+  canceledOrder = 6
 }
 
 // 订单详情数据
@@ -398,7 +400,7 @@ const fetchOrderDetail = async () => {
 
 // 倒计时结束取消订单
 const onTimeup = () => {
-  order.value!.orderState = IOrderStatus.canceledTasks
+  order.value!.orderState = IOrderStatus.canceledOrder
 }
 
 // 支付操作
@@ -419,8 +421,22 @@ const onDelivery = async () => {
       icon: 'success',
       title: '模拟发货成功'
     })
-    // 手动更新订单状态
+    // 更新订单状态为待收货
     order.value!.orderState = IOrderStatus.pendingReceipt
+  })
+}
+
+// 确认收货
+const onMemberReceipt = () => {
+  uni.showModal({
+    content:
+      '为保障您的权益，请收到货并确认无误后，再确认收货。',
+    success: async function (res) {
+      if (res.confirm) {
+        const res = await putMemberReceiptByid(query.id)
+        order.value = res.result
+      }
+    }
   })
 }
 
