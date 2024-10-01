@@ -69,11 +69,12 @@
             </navigator>
             <!-- 待发货状态：模拟发货,开发期间使用,用于修改订单状态为已发货 -->
             <view
+              class="button"
               v-if="
                 IDEV &&
                 order.orderState === IOrderStatus.pendingShipment
               "
-              class="button"
+              @tap="onDelivery"
             >
               模拟发货
             </view>
@@ -267,7 +268,11 @@
 <script setup lang="ts">
 import { IDEV } from '@/constants/global'
 import { useGuessLike } from '@/hooks'
-import { getMemberOrderById, getPayMentMock } from '@/service'
+import {
+  getMemberOrderById,
+  getMemberOrderConsignmentById,
+  getPayMentMock
+} from '@/service'
 import type { OrderDetailResult } from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -405,6 +410,18 @@ const onPayment = async () => {
       })
     })
   }
+}
+
+// 模拟发货
+const onDelivery = async () => {
+  await getMemberOrderConsignmentById(query.id).then(() => {
+    uni.showToast({
+      icon: 'success',
+      title: '模拟发货成功'
+    })
+    // 手动更新订单状态
+    order.value!.orderState = IOrderStatus.pendingReceipt
+  })
 }
 
 // 页面初始化
