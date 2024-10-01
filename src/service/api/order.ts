@@ -103,11 +103,30 @@ export const putMemberReceiptByid = (id: string) => {
 /**
  * @desc:获取订单物流信息
  * @param {string} id 订单id
- * @return {*}
+ * @return {OrderLogisticResult}
  */
 export const getMemberOrderLogistics = (id: string) => {
   return http<OrderLogisticResult>({
     method: 'GET',
     url: ` member/order/${id}/logistics`
+  })
+}
+
+/**
+ * @desc:取消订单
+ * @param {id} string 订单id
+ * @param {data} {cancelReason: string} 取消原因
+ * @return {*}
+ */
+export const putMemberCancelOrder = (
+  id: string,
+  data: {
+    cancelReason?: string
+  }
+) => {
+  return http<OrderDetailResult>({
+    method: 'PUT',
+    url: `/member/order/${id}/cancel`,
+    data
   })
 }

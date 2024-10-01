@@ -243,7 +243,8 @@
       <!-- 骨架屏组件 -->
     </template>
   </scroll-view>
-  <!-- 取消订单弹窗 -->
+
+  <!-- 取消订单popup弹窗 -->
   <uni-popup ref="popup" type="bottom" background-color="#fff">
     <view class="popup-root">
       <view class="title">订单取消</view>
@@ -264,7 +265,9 @@
       </view>
       <view class="footer">
         <view class="button" @tap="popup?.close?.()">取消</view>
-        <view class="button primary">确认</view>
+        <view class="button primary" @tap="onCancelOrder"
+          >确认</view
+        >
       </view>
     </view>
   </uni-popup>
@@ -278,6 +281,7 @@ import {
   getMemberOrderConsignmentById,
   getMemberOrderLogistics,
   getPayMentMock,
+  putMemberCancelOrder,
   putMemberReceiptByid
 } from '@/service'
 import type {
@@ -459,6 +463,17 @@ const logistics = ref({} as OrderLogisticResult)
 const fetchMemberLogistics = async () => {
   const res = await getMemberOrderLogistics(query.id)
   logistics.value = res.result
+}
+
+// 取消订单
+const onCancelOrder = async () => {
+  const res = await putMemberCancelOrder(query.id, {
+    cancelReason: reason.value
+  })
+  // 更新订单状态为已取消
+  order.value = res.result
+  // 关闭弹窗
+  popup.value?.close?.()
 }
 
 // 页面初始化
