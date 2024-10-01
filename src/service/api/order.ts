@@ -130,3 +130,18 @@ export const putMemberCancelOrder = (
     data
   })
 }
+
+/**
+ * @desc:删除订单
+ * @param data ids 订单集合
+ * @return {msg:string}
+ */
+export const deleteMemberOrderById = (data: {
+  ids: string[]
+}) => {
+  return http<{ msg: string }>({
+    method: 'DELETE',
+    url: '/member/order',
+    data
+  })
+}

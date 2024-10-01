@@ -233,6 +233,7 @@
             v-if="
               order.orderState >= IOrderStatus.pendingReviews
             "
+            @tap="onDeleteOrder"
           >
             删除订单
           </view>
@@ -277,6 +278,7 @@
 import { IDEV } from '@/constants/global'
 import { useGuessLike } from '@/hooks'
 import {
+  deleteMemberOrderById,
   getMemberOrderById,
   getMemberOrderConsignmentById,
   getMemberOrderLogistics,
@@ -435,8 +437,6 @@ const onDelivery = async () => {
     })
     // 更新订单状态为待收货
     order.value!.orderState = IOrderStatus.pendingReceipt
-    // 获取订单物流消息
-    fetchMemberLogistics()
   })
 }
 
@@ -474,6 +474,24 @@ const onCancelOrder = async () => {
   order.value = res.result
   // 关闭弹窗
   popup.value?.close?.()
+}
+
+// 删除订单
+const onDeleteOrder = async () => {
+  uni.showModal({
+    content: '是否删除订单？',
+    success: async function (res) {
+      if (res.confirm) {
+        await deleteMemberOrderById({
+          ids: [query.id]
+        }).then(() => {
+          uni.redirectTo({
+            url: '/pagesOrder/list/list'
+          })
+        })
+      }
+    }
+  })
 }
 
 // 页面初始化
