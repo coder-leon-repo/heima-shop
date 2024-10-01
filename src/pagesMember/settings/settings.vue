@@ -61,7 +61,7 @@ const isLogin = computed(() => {
 const onLogout = () => {
   uni.showModal({
     content: '是否退出登录？',
-    success: (res) => {
+    success: async function (res) {
       if (res.confirm) {
         // 清理用户信息
         memberStore.clearProfile()

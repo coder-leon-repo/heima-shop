@@ -84,11 +84,15 @@
       <!-- 配送状态 -->
       <view class="shipment">
         <!-- 订单物流信息 -->
-        <view v-for="item in 1" :key="item" class="item">
+        <view
+          class="item"
+          v-for="item in logistics.list"
+          :key="item.id"
+        >
           <view class="message">
-            <!-- {{  }} -->
+            {{ item.text }}
           </view>
-          <view class="date"> 2023-04-14 13:14:20 </view>
+          <view class="date"> {{ item.time }}</view>
         </view>
         <!-- 用户收货地址 -->
         <view class="locate">
@@ -272,10 +276,14 @@ import { useGuessLike } from '@/hooks'
 import {
   getMemberOrderById,
   getMemberOrderConsignmentById,
+  getMemberOrderLogistics,
   getPayMentMock,
   putMemberReceiptByid
 } from '@/service'
-import type { OrderDetailResult } from '@/types/order'
+import type {
+  OrderDetailResult,
+  OrderLogisticResult
+} from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
@@ -423,6 +431,8 @@ const onDelivery = async () => {
     })
     // 更新订单状态为待收货
     order.value!.orderState = IOrderStatus.pendingReceipt
+    // 获取订单物流消息
+    fetchMemberLogistics()
   })
 }
 
@@ -435,9 +445,20 @@ const onMemberReceipt = () => {
       if (res.confirm) {
         const res = await putMemberReceiptByid(query.id)
         order.value = res.result
+        // 获取订单物流消息
+        fetchMemberLogistics()
       }
     }
   })
+}
+
+// 物流信息
+const logistics = ref({} as OrderLogisticResult)
+
+// 获取订单物流信息
+const fetchMemberLogistics = async () => {
+  const res = await getMemberOrderLogistics(query.id)
+  logistics.value = res.result
 }
 
 // 页面初始化

@@ -87,7 +87,7 @@ const fetchAddressListData = async () => {
 const onDeleteMemberAddress = (id: string) => {
   uni.showModal({
     content: '删除地址?',
-    success: async res => {
+    success: async function (res) {
       if (res.confirm) {
         await deleteMemberAddress(id).then(() => {
           fetchAddressListData()

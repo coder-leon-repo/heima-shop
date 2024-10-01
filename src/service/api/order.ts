@@ -1,5 +1,6 @@
 import type {
   OrderDetailResult,
+  OrderLogisticResult,
   OrderPreResult,
   SubmitOrderParams
 } from '@/types/order'
@@ -96,5 +97,17 @@ export const putMemberReceiptByid = (id: string) => {
   return http<OrderDetailResult>({
     method: 'PUT',
     url: `/member/order/${id}/receipt`
+  })
+}
+
+/**
+ * @desc:获取订单物流信息
+ * @param {string} id 订单id
+ * @return {*}
+ */
+export const getMemberOrderLogistics = (id: string) => {
+  return http<OrderLogisticResult>({
+    method: 'GET',
+    url: ` member/order/${id}/logistics`
   })
 }
