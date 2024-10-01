@@ -38,7 +38,7 @@ import { onLoad } from '@dcloudio/uni-app'
 
 // 获取页面参数
 const query = defineProps<{
-  // 订单id
+  /*订单id*/
   id: string
 }>()
 
