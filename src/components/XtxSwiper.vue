@@ -41,7 +41,7 @@ defineProps<{
   swiperData: BannerItem[]
 }>()
 
-// 当前轮播图索引
+// 当前轮播图下标
 const active = ref(0)
 
 // 监听轮播图切换
