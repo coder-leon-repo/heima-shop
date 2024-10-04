@@ -22,7 +22,7 @@ pnpm i --registry=https://registry.npmmirror.com
 
 ```shell
 # 微信小程序端
-pnpm run dev
+pnpm dev
 
 # App端
 需 HbuilderX 工具，运行 - 运行到手机或模拟器

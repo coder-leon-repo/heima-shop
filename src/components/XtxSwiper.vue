@@ -45,7 +45,7 @@ defineProps<{
 const active = ref(0)
 
 // 监听轮播图切换
-const onSlideChange: UniHelper.SwiperOnChange = e => {
+const onSlideChange: UniHelper.SwiperOnChange = (e) => {
   active.value = e.detail.current
 }
 </script>

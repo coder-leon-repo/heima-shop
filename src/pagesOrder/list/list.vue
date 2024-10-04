@@ -34,7 +34,7 @@
 import { ref } from 'vue'
 import OrderList from './components/order-list.vue'
 
-// 页面参数:type订单类型
+// 页面参数 type:订单类型
 const query = defineProps<{
   type: string
 }>()
