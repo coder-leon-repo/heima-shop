@@ -52,7 +52,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref } from 'vue'
 import type { subTypeItem } from '@/types/recommend'
 import { getHotRecommendData } from '@/service'
-import { HOT_RECOMMEND } from '@/constants/global'
+import { HOT_RECOMMEND } from '@/constants/recommend'
 
 /* 接受首页传递的数据 */
 const query = defineProps<{
@@ -62,7 +62,7 @@ const query = defineProps<{
 const hotRecommendMap = cloneDeep(HOT_RECOMMEND)
 
 const currentHotMap = hotRecommendMap.find(
-  item => item.type === query.type
+  (item) => item.type === query.type
 )
 
 // 动态设置标题

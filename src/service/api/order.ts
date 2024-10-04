@@ -1,5 +1,7 @@
 import type {
   OrderDetailResult,
+  OrderListParams,
+  OrderListResult,
   OrderLogisticResult,
   OrderPreResult,
   SubmitOrderParams
@@ -141,6 +143,15 @@ export const deleteMemberOrderById = (data: {
 }) => {
   return http<{ msg: string }>({
     method: 'DELETE',
+    url: '/member/order',
+    data
+  })
+}
+
+// 获取订单列表
+export const getMemberOrderList = (data: OrderListParams) => {
+  return http<OrderListResult>({
+    method: 'GET',
     url: '/member/order',
     data
   })

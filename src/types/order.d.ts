@@ -1,3 +1,5 @@
+import type { PageResult } from './global'
+
 // 订单预支付返回结果
 export type OrderPreResult = {
   /* 商品集合 */
@@ -164,4 +166,20 @@ export type LogisticItem = {
   text: string
   /** 时间 */
   time: string
+}
+
+// 订单列表参数
+export type OrderListParams = {
+  page?: number
+  pageSize?: number
+  orderState?: number
+}
+
+// 订单列表
+export type OrderListResult = PageResult<OrderItem>
+
+// 订单列表项
+export type OrderItem = OrderDetailResult & {
+  /** 总件数 */
+  totalNum: number
 }

@@ -20,11 +20,11 @@
     <swiper
       class="swiper"
       :current="active"
-      @change="event => (active = event.detail.current)"
+      @change="(event) => (active = event.detail.current)"
     >
       <!-- 滑动项 -->
       <swiper-item v-for="item in orderTabs" :key="item.id">
-        <OrderList />
+        <OrderList :order-state="item.orderState" />
       </swiper-item>
     </swiper>
   </view>
@@ -50,7 +50,7 @@ const orderTabs = ref([
 
 // 按传递的参数匹配下标
 const matchIndex = orderTabs.value.findIndex(
-  v => v.orderState === Number(query.type)
+  (v) => v.orderState === Number(query.type)
 )
 
 // tabs下标
