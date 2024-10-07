@@ -35,6 +35,10 @@
 import { postLoginByPhone } from '@/service'
 import { useMemberStore } from '@/store'
 import type { LoginResult } from '@/types/member'
+import { onBeforeUnmount, ref } from 'vue'
+
+// 定时器
+const timer = ref<number | null>(null)
 
 // 获取用户手机号
 const onGetPhoneNumberMock = async () => {
@@ -45,7 +49,8 @@ const onGetPhoneNumberMock = async () => {
       icon: 'success',
       title: '登录成功'
     })
-    setTimeout(() => {
+
+    timer.value = setTimeout(() => {
       uni.navigateBack()
     }, 300)
   } catch (error: any) {
@@ -62,6 +67,12 @@ const handleLogin = (profiles: LoginResult) => {
   const memberStore = useMemberStore()
   memberStore.setProfile(profiles)
 }
+
+// 清理定时器
+onBeforeUnmount(() => {
+  timer.value && clearTimeout(timer.value)
+  timer.value = null
+})
 </script>
 
 <style lang="scss">

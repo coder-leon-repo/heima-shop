@@ -276,7 +276,10 @@
 
 <script setup lang="ts">
 import { IDEV } from '@/constants/global'
-import { IOrderStatus, ORDER_STATE_LIST } from '@/constants/order'
+import {
+  IOrderStatus,
+  ORDER_STATE_LIST
+} from '@/constants/order'
 import { useGuessLike } from '@/hooks'
 import {
   deleteMemberOrderById,
@@ -389,7 +392,6 @@ const order = ref<OrderDetailResult>()
 const fetchOrderDetail = async () => {
   const res = await getMemberOrderById(query.id)
   order.value = res.result
-  // order.value.orderState = 2
 }
 
 // 倒计时结束取消订单

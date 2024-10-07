@@ -28,7 +28,7 @@
           class="picker"
           mode="region"
           :value="addressForm.fullLocation.split(' ')"
-          @change="onChangeCity($event)"
+          @change="onChangeCity"
         >
           <view v-if="addressForm.fullLocation">{{
             addressForm.fullLocation
@@ -52,14 +52,13 @@
           class="switch"
           color="#27ba9b"
           :checked="!!addressForm.isDefault"
-          @change="onChangeSwitch($event)"
+          @change="onChangeSwitch"
         />
       </view>
     </uni-forms>
   </view>
   <!-- 提交按钮 -->
   <button class="button" @tap="onSubmit()">保存并使用</button>
-  {{ addressForm }}
 </template>
 
 <script setup lang="ts">
@@ -128,7 +127,7 @@ const addressFormRules = {
 }
 
 // 监听省市区选项
-const onChangeCity: UniHelper.RegionPickerOnChange = e => {
+const onChangeCity: UniHelper.RegionPickerOnChange = (e) => {
   // 更新前端页面
   addressForm.value.fullLocation = e.detail.value.join(' ')
   // 更新后端省/市/区(县)的编码
@@ -138,7 +137,7 @@ const onChangeCity: UniHelper.RegionPickerOnChange = e => {
 }
 
 // 设置为默认地址
-const onChangeSwitch: UniHelper.SwitchOnChange = e => {
+const onChangeSwitch: UniHelper.SwitchOnChange = (e) => {
   addressForm.value.isDefault = Number(e.detail.value)
 }
 
